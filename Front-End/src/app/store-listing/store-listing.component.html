@@ -1,0 +1,108 @@
+<div class="page-title row">
+  <div class="col">
+    <h2 class="arrange-icon">
+      {{ value }} Listing
+      <app-help [infoKey]="storeSupport"></app-help>
+    </h2>
+  </div>
+  <div class="col">
+    <div *ngIf="this.dataSource.data.length < totalStoresCount">
+      <button
+        id="Add_Store"
+        class="btn btn-sm btn-primary mt-2 pull-right"
+        data-toggle="tooltip"
+        data-placement="bottom"
+        title="Click here to create new {{ storeTranslate }}"
+        routerLink="/add-store/"
+      >
+        Add {{ value }}
+      </button>
+    </div>
+    <div *ngIf="this.dataSource.data.length === totalStoresCount">
+      <button
+        id="Add_Store"
+        class="btn btn-sm btn-primary mt-2 pull-right"
+        data-toggle="tooltip"
+        data-placement="bottom"
+        title="Click here to create new {{ storeTranslate }}"
+        (click)="storeLimitPopUp()"
+      >
+        Add {{ value }}
+      </button>
+    </div>
+  </div>
+</div>
+
+<mat-table
+  #table
+  [dataSource]="dataSource"
+  class="mat-elevation-z8"
+  id="storelisiting"
+>
+  <!--- Note that these columns can be defined in any order.
+            The actual rendered columns are set as a property on the row definition" -->
+
+  <!-- Position Column -->
+
+  <ng-container matColumnDef="storeName">
+    <mat-header-cell
+      class="custom-mat-header-styling tableHeaderCellDiv"
+      *matHeaderCellDef
+    >
+      {{ value }}Name
+    </mat-header-cell>
+    <mat-cell *matCellDef="let element">
+      {{ element.storeName }}
+    </mat-cell>
+  </ng-container>
+
+  <!-- Name Column -->
+  <ng-container matColumnDef="address">
+    <mat-header-cell
+      class="custom-mat-header-styling tableHeaderCellDiv"
+      *matHeaderCellDef
+    >
+      Location
+    </mat-header-cell>
+    <mat-cell *matCellDef="let element">
+      {{ element.address }}
+    </mat-cell>
+  </ng-container>
+
+  <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+  <mat-row
+    *matRowDef="let row; columns: displayedColumns"
+    id="mat-row"
+  ></mat-row>
+
+  <ng-container matColumnDef="actions">
+    <mat-header-cell *matHeaderCellDef> Actions </mat-header-cell>
+    <mat-cell *matCellDef="let element">
+      <span
+        class="bi-pencil-fill edit-icon mr-3"
+        data-toggle="tooltip"
+        data-placement="bottom"
+        title="Click here to edit {{ storeTranslate }}"
+        id="editStore"
+        routerLink="/edit-store/{{ element.storeId }}"
+      ></span>
+      <span
+        class="bi-trash-fill mr-3 delete-icon"
+        data-toggle="tooltip"
+        data-placement="bottom"
+        title="Click here to delete {{ storeTranslate }}"
+        id="delete_store"
+        (click)="deleteStore(element.storeId)"
+      ></span>
+      <span
+        class="bi-bell-fill mr-3 notification-icon"
+        id="fetch_notifications"
+        data-toggle="tooltip"
+        data-placement="bottom"
+        title="Click here to see the notifications"
+        (click)="fetchNotificationsBelongsToStore(element.storeId)"
+      ></span>
+    </mat-cell>
+  </ng-container>
+</mat-table>
+<!-- <mat-paginator #paginator [pageSize]="dataSource.data.length"></mat-paginator> -->

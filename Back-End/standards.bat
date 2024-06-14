@@ -1,0 +1,1 @@
+npm run format && START /wait npm run lint && npm run build

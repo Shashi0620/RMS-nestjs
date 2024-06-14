@@ -1,0 +1,352 @@
+<nav
+  class="navbar navbar-expand-lg navbar-light border border-light"
+  *ngIf="menuService.isTrayMenu"
+>
+  <div class="header-container">
+    <div class="container-fluid" *ngIf="traySelected">
+      <label
+        id="rack_back"
+        class="btn btn-primaryy rounded-pill px-3 mb-2 mb-lg-0"
+        data-toggle="tooltip"
+        data-placement="bottom"
+        title="Back to {{ racksTranslate }}"
+        (click)="onLayoutChange(trayList)"
+      >
+        <span class="d-flex align-items-center px-2">
+          <i id="back" class="bi bi-arrow-left"></i>
+        </span>
+      </label>
+
+      <a
+        (click)="
+          changePage('itemList', trayId, rackId, rackName, trayName, trayList)
+        "
+      >
+        <label
+          class="btn btn-primaryy border border-primary rounded-pill px-3 mb-2 mb-lg-0"
+          id="add_items"
+          data-toggle="tooltip"
+          data-placement="bottom"
+          title="Click to add items to selected tray"
+        >
+          <span class="d-flex align-items-center px-2">
+            <span class="small">Checkin/Checkout {{ item }}</span>
+          </span>
+        </label>
+      </a>
+
+      <label
+        class="btn btn-primaryy border border-primary rounded-pill px-3 mb-2 mb-lg-0"
+        id="copy_tray"
+        data-toggle="tooltip"
+        data-placement="bottom"
+        title="Click to copy tray"
+        (click)="saveTrayLayout(trayList, true)"
+      >
+        <span class="d-flex align-items-center px-2">
+          <span class="small">Copy</span>
+        </span>
+      </label>
+
+      <label
+        class="btn btn-primaryy border border-primary rounded-pill px-3 mb-2 mb-lg-0"
+        id="remove_tray"
+        data-toggle="tooltip"
+        data-placement="bottom"
+        title="Click to remove selected tray"
+        (click)="showDeleteTrayPopUp(trayList)"
+      >
+        <span class="d-flex align-items-center px-2">
+          <span class="small">Delete</span>
+        </span>
+      </label>
+
+      <!-- <label
+        for="img-upload"
+        class="btn btn-primaryy border border-primary rounded-pill px-3 mb-2 mb-lg-0"
+        data-toggle="tooltip"
+        data-placement="bottom"
+        title="Choose icon for your selected tray"
+        id="tray_img_upload"
+        *ngIf="selectTrayItem"
+      >
+        <span class="d-flex align-items-center px-2">
+          <span class="small">
+            Upload picture to {{ currentlyBeingEditedTray.name }}</span
+          >
+        </span>
+        <input
+          class="d-none"
+          type="file"
+          name="uploadedimages0"
+          multiple
+          id="img-upload_{{ trayId }}"
+          (change)="selectFile($event)"
+        />
+      </label> -->
+
+      <!-- <label class="btn btn-primaryy border border-primary rounded-pill px-3 mb-2 mb-lg-0" id="color_picker" type="button"
+        data-toggle="tooltip" data-placement="bottom" title="Pick Color for your selected tray" (click)="isColorOpen = !isColorOpen">
+        <span class="d-flex align-items-center px-2">
+          <span class="small"> Add Color</span>
+        </span>
+      </label> -->
+
+      <label>
+        <div
+          class="position-absolute popup-picker"
+          *ngIf="isColorOpen"
+          id="colour_picker_{{ trayId }}"
+        >
+          <color-sketch
+            [color]="currentlyBeingEditedTray.color"
+            (onChangeComplete)="changeColorComplete($event)"
+            (change)="inputBoxFlag()"
+          ></color-sketch>
+        </div>
+      </label>
+
+      <div
+        class="btn btn-primaryy border border-primary rounded-pill px-3 mb-2 mb-lg-0"
+        id="search"
+        data-toggle="tooltip"
+        data-placement="bottom"
+        title="Make your tray as non serachable"
+        (click)="updateSearchValue()"
+      >
+        <input
+          class="checkbox-input"
+          type="checkbox"
+          id="searchable"
+          [checked]="currentlyTraySearchable"
+        />
+        <label class="form-check-label small pr-2" for="searchable">
+          &nbsp; Searchable
+        </label>
+      </div>
+
+      <div class="btn-group" role="group" aria-label="First group">
+        <form [formGroup]="form" (ngSubmit)="saveTray()" class="d-flex ml-2">
+          <!-- <input class="form-control me-1" type="text" placeholder="Edit Name" aria-label="Search" id="rack_name_change"
+            formControlName="trayname" /> -->
+          <!-- <label>
+            <button class="btn btn-primaryy border border-primary rounded-pill ml-2 save-button" data-toggle="tooltip"
+              data-placement="bottom" type="submit" id="save_tray" title="Click to save changes of selected tray">
+              <span class="d-flex align-items-center px-2">
+                <span class="small">Save</span>
+              </span>
+            </button>
+          </label>          -->
+          <!-- <label class="btn btn-primaryy border border-primary rounded-pill px-3 mb-0 mb-lg-3 ml-2 save-button" data-toggle="tooltip" data-placement="bottom"
+            title="Click here to save tray layout" id="save_tray_layout" (click)="saveTrayLayout(trayList)">
+            <span class="d-flex align-items-center px-2">
+              <span class="small">Save Layout</span>
+            </span>
+          </label> -->
+        </form>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<div class="tray-container" id="tray_grid">
+  <div class="page-title">
+    <div *ngIf="!changeTitle" class="page-title arrange-icon">
+      <h4 class="page-title">{{ tray }} of {{ rack }} : {{ rackName }}</h4>
+      <app-help
+        [infoKey]="trayview_support"
+        style="font-size: 20px; cursor: pointer"
+      ></app-help>
+    </div>
+    <div *ngIf="changeTitle" class="page-title arrange-icon">
+      <h4 class="page-title">
+        Editing {{ tray }} : {{ currentlyBeingEditedTray.name }}
+      </h4>
+      <app-help
+        [infoKey]="trayedit_support"
+        style="font-size: 20px; cursor: pointer"
+      ></app-help>
+    </div>
+  </div>
+  <div>
+    <ktd-grid
+      id="grid"
+      [cols]="cols"
+      [rowHeight]="rowHeight"
+      [layout]="trayList"
+      [compactType]="compactType"
+      (dragStarted)="onDragStarted($event)"
+      (resizeStarted)="onResizeStarted($event)"
+      (dragEnded)="onDragEnded()"
+      (resizeEnded)="onResizeEnded()"
+      (layoutUpdated)="onLayoutUpdated($event)"
+      (click)="inputBoxhide()"
+    >
+      <ktd-grid-item
+        *ngFor="let item of trayList; trackBy: trackById; index as i"
+        [id]="item.id"
+        [transition]="currentTransition"
+        [dragStartThreshold]="dragStartThreshold"
+        [draggable]="!disableDrag"
+        [resizable]="!disableResize"
+      >
+        <div
+          *ngIf="searchtrayId == item.id"
+          class="card m-1 p-2"
+          (click)="editTray(item.id)"
+          class=" {{
+            trayDataList[i].cssClass !== undefined
+              ? trayDataList[i].cssClass
+              : ''
+          }} searchborders "
+        >
+          <img
+            [src]="trayDataList[i].img"
+            class="card-img-top mx-auto d-block"
+            style="width:{{ item.w * 100 }}px; height:{{ item.h * 50 - 50 }}px;"
+          />
+
+          <span class="card-text">{{ trayDataList[i].name }}</span>
+          <div class="position-absolute bottom-0 end-0 p-2">
+            <span
+              class="badge badge-pill badge-primary"
+              style="background-color: {{ trayDataList[i].color }};"
+            >
+              {{ trayDataList[i].quantity }}
+            </span>
+          </div>
+          <!-- </div> -->
+        </div>
+        <!--Border-color div-->
+        <div
+          *ngIf="borderColor == item.id"
+          class="card m-1 p-2"
+          (click)="editTray(item.id)"
+          class=" {{
+            trayDataList[i].cssClass !== undefined
+              ? trayDataList[i].cssClass
+              : ''
+          }} normal-borders "
+        >
+          <div (click)="showImageSelectPopUp(item.id)">
+            <img
+              [src]="trayDataList[i].img"
+              class="card-img-top mx-auto d-block"
+              style="width:{{ item.w * 100 }}px; height:{{
+                item.h * 50 - 50
+              }}px;"
+            />
+            <input
+              class="d-none"
+              type="file"
+              name="uploadedimages0"
+              multiple
+              id="img-upload_{{ item.id }}"
+              (change)="selectFile($event)"
+              accept=".jpg,.png,.PNG,.JPG,.jpeg,.JPEG"
+            />
+          </div>
+
+          <div
+            class="btn-group"
+            role="group"
+            aria-label="First group"
+            (click)="showInputBox()"
+            style="right: 7px"
+          >
+            <form [formGroup]="form" class="d-flex ml-2">
+              <input
+                class="form-control me-1"
+                type="text"
+                placeholder="Edit Name"
+                aria-label="Search"
+                id="rack_name_change"
+                formControlName="trayname"
+                (change)="inputBoxFlag()"
+                *ngIf="isInputOpen"
+                style="height: 28px"
+              />
+              <span class="card-text" *ngIf="!isInputOpen">{{
+                trayDataList[i].name
+              }}</span>
+            </form>
+          </div>
+
+          <div
+            class="position-absolute bottom-0 end-0 p-2"
+            (click)="showColorPicker(item.id)"
+          >
+            <!-- <label>
+            <div class="position-absolute popup-picker_{{item.id}}" *ngIf="isColorOpen">
+              <color-sketch [color]="currentlyBeingEditedTray.color" width="20"
+                (onChangeComplete)="changeColorComplete($event)"></color-sketch>
+            </div>
+          </label> -->
+            <span
+              class="badge badge-pill badge-primary"
+              style="background-color: {{ trayDataList[i].color }};"
+            >
+              {{ trayDataList[i].quantity }}
+            </span>
+          </div>
+          <!-- </div> -->
+        </div>
+        <!--Border-color div-->
+        <div
+          class="card m-1 p-2"
+          (click)="editTray(item.id)"
+          class=" {{
+            trayDataList[i].cssClass !== undefined
+              ? trayDataList[i].cssClass
+              : ''
+          }}  "
+        >
+          <img
+            [src]="trayDataList[i].img"
+            class="card-img-top mx-auto d-block"
+            style="width:{{ item.w * 100 }}px; height:{{ item.h * 50 - 50 }}px;"
+          />
+
+          <span class="card-text">{{ trayDataList[i].name }}</span>
+          <div class="position-absolute bottom-0 end-0 p-2">
+            <span
+              class="badge badge-pill badge-primary"
+              style="background-color: {{ trayDataList[i].color }};"
+            >
+              {{ trayDataList[i].quantity }}
+            </span>
+          </div>
+        </div>
+      </ktd-grid-item>
+    </ktd-grid>
+  </div>
+</div>
+
+<div *ngIf="isQuantity" class="mat-app-background basic-container">
+  <mat-table #table [dataSource]="dataSource" class="mat-elevation-z8">
+    <ng-container matColumnDef="name">
+      <mat-header-cell *matHeaderCellDef class="text-bold">
+        RackName
+      </mat-header-cell>
+      <mat-cell *matCellDef="let element">
+        {{ element.name }}
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="storeName">
+      <mat-header-cell *matHeaderCellDef class="text-bold">
+        {{ storeTranslate }}Name
+      </mat-header-cell>
+      <mat-cell *matCellDef="let element">
+        {{ element.storeName }}
+      </mat-cell>
+    </ng-container>
+
+    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+    <mat-row *matRowDef="let row; columns: displayedColumns"></mat-row>
+  </mat-table>
+</div>
+
+<div *ngIf="message" class="alert alert-secondary" role="alert">
+  {{ message }}
+</div>

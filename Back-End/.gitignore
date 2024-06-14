@@ -1,0 +1,9 @@
+node_modules
+package-lock.json
+*.js
+*.js.map
+/dist/*
+resources/adminJsonFolder/*
+resources/static/assets/uploads/*
+app/config/db.config.ts
+app/environment.ts

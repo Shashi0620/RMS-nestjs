@@ -1,0 +1,18 @@
+{
+  "fromEmailAddressName": "RMS Support",
+  "fromEmailAddress": "correspondence@rms.electems.com",
+  "activationEmailSubject": "Your Rack Management Account Activation Link",
+  "quantityAlert": "Alert - Quantity has reached limit ",
+  "trailend": "Your Rack Management System Trail package has expired",
+  "registrationEmailSubject": "Welcome to Rack Management System",
+  "staffregistrationEmailSubject": "Welcome to Rack Management System",
+  "changePassword": "Your Rack Management System Password is Updated",
+  "subjectofPasswordEmail": "Your Rack Management System new password",
+  "adminSystemUrl": "./resources/adminJsonFolder/",
+  "timeinterval": "30 day",
+  "notificationduration": 7,
+  "noOFRetry": 3,
+  "companyEmail": "correspondence@rms.electems.com",
+  "enquirySubject": "Rack Management - Customer Enquiry",
+  "ticketSubject": "Rack Management - Customer Raised a Ticket"
+}

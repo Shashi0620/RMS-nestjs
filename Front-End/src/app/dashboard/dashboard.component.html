@@ -1,0 +1,90 @@
+<!-- add now -->
+<div class="page-title row">
+  <h2 class="arrange-icon">Dashboard
+    <app-help [infoKey]="dashboardSupport"></app-help>      
+  </h2>
+</div>
+<div class="input-group col">
+  <input type="search" id="search" name="searchString" class="form-control me-2" [(ngModel)]="search" (keyup.enter)="
+      rackSearchListing(search, userId, client_fk, schemaName)
+    " placeholder="Search for item" aria-label="Search" aria-describedby="search-addon" />
+  <button type="button" id="searchbutton" class="btn btn"
+    (click)="rackSearchListing(search, userId, client_fk, schemaName)">
+    <i class="bi-search mr-0 search-icon"></i>
+  </button>
+</div>
+
+<div id="mySidenav" class="sidenav">
+  <a class="closebtn" (click)="closeNav()">&times;</a>
+  <div *ngFor="let store of productsInStore">
+    <mat-card class="example-card">
+      <mat-card-header>
+        <mat-card-title style="
+        font-size: 16px;
+    ">{{store.storeName}}</mat-card-title>
+        <mat-card-subtitle>Rack:- {{store.rackname}}</mat-card-subtitle>
+        <mat-card-subtitle>Tray:- {{store.trayname}}</mat-card-subtitle>
+      </mat-card-header>
+      <mat-card-content style="padding-bottom: 0px; padding-top: 3px;">
+
+        <div class="mini-fab-icon">
+          <div>
+            <a mat-mini-fab id="view_rack" class="bi bi-eye-fill text-success context-menu mr-3 icon"
+              data-toggle="tooltip" data-placement="bottom" title="Click here to view the rack"
+              style="float: inherit;cursor: pointer;" (click)="
+              fetchTrayViewAfterSearch(
+                store.rackid,
+                store.trayid,
+                store.trayname
+              )
+            "></a>
+
+          </div>
+          <div>
+            <a mat-mini-fab id="boot-icon" class="bi bi-hdd-rack-fill text-success context-menu mr-3 icon"
+              style="font-size: 24px; color: rgb(0, 128, 55);float: inherit;cursor: pointer;"
+              (click)="navigateToRacks()">
+            </a>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+  </div>
+</div>
+
+
+<!-- googlemaps -->
+<div id="contents" #contents>
+</div>
+
+<ng-template cdkConnectedOverlay [cdkConnectedOverlayHasBackdrop]="true" (backdropClick)="isOpen=false"
+  [cdkConnectedOverlayOpen]="isOpen" style="
+  padding: 174px;
+">
+  <div class="container">
+    <div class="card" style="        
+        margin: 16px auto;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        left: 88px;
+        top: 189px;
+    ">
+      <div class="card-body" style="max-height: 500px; overflow-y: auto;">
+        <blockquote>
+          <p [innerHTML]="support.support"></p>
+          <div *ngIf="forTrailUser">
+            <button id="previous_button" class="btn btn-primary" (click)="showPreviousToolTip()" *ngIf="previousButtonFlag">
+              <i class="fa fa-arrow-left"></i> Previous
+            </button>
+            <button id="next_button" class="btn btn-primary" (click)="showNextToolTip()" *ngIf="nextButtonFlag">
+              Next <i class="fa fa-arrow-right"></i>
+            </button>
+            <button id="cancel" class="btn btn-secondary" (click)="cancel()">Cancel</button>
+          </div>
+        </blockquote>
+      </div>
+    </div>
+  </div>
+</ng-template>

@@ -1,0 +1,115 @@
+<div class="page-title row">
+  <div class="col">
+    <h2 id="productname" class="arrange-icon">
+      {{ formHeadingName }} Listing
+      <app-help [infoKey]="prouductSuport"></app-help>
+    </h2>
+  </div>
+  <div class="col">
+    <button
+      id="add_product"
+      class="btn btn-sm btn-primary pull-right"
+      data-toggle="tooltip"
+      data-placement="bottom"
+      title="Click here to add new product"
+      (click)="addNewForm()"
+    >
+      Add New {{ product }}
+    </button>
+  </div>
+</div>
+<div class="row">
+  <div class="spinner-container" *ngIf="dataSource | async">
+    <mat-spinner></mat-spinner>
+  </div>
+  <div>
+    <div *ngIf="showHideColumn" class="button">
+      <button
+        class="btn btn-sm btn-primary fa fa-eye-slash"
+        data-toggle="tooltip"
+        id="columns"
+        title="Show Hide Columns"
+        #menuTrigger="matMenuTrigger"
+        [matMenuTriggerFor]="mainMenuButton"
+      ></button>
+      <mat-menu #mainMenuButton="matMenu">
+        <span
+          (click)="$event.stopPropagation()"
+          *ngFor="let column of columnShowHideList; index as i"
+        >
+          <mat-slide-toggle
+            [(ngModel)]="column.isActive"
+            (change)="toggleColumn(column)"
+          ></mat-slide-toggle>
+          {{ column.name }}
+          <br />
+        </span>
+      </mat-menu>
+    </div>
+  </div>
+  <div class="basic-container" id="productlisting">
+    <div *ngIf="dataSource.data.length > 0">
+      <mat-table
+        #table
+        [dataSource]="dataSource"
+        class="mat-elevation-z8 w-100"
+      >
+        <ng-container
+          matColumnDef="noData"
+          [attr.colspan]="dataSource.length"
+          class="text-bold table-view"
+        >
+          No Products Are Added To This {{ formName }}.
+        </ng-container>
+        <ng-container
+          matColumnDef="{{ column }}"
+          *ngFor="let column of displayedColumns"
+        >
+          <mat-header-cell
+            class="text-bold table-view"
+            *matHeaderCellDef
+            class="text-bold table-view"
+          >
+            {{ column }}
+          </mat-header-cell>
+          <mat-cell *matCellDef="let element">
+            <div [innerHTML]="element[column]"></div>
+            &nbsp;
+            <span
+              id="edit product"
+              *ngIf="column == 'Actions'"
+              class="bi-pencil-fill mr-4 edit-icon"
+              data-toggle="tooltip"
+              data-placement="bottom"
+              title="Click here to edit form"
+              (click)="routeToProductEdit(formName, element.Id)"
+            ></span>
+            <span
+              id="delete"
+              *ngIf="column == 'Actions'"
+              class="bi-trash-fill mr-2 delete-icon"
+              data-toggle="tooltip"
+              data-placement="bottom"
+              title="Click here to delete the form"
+              (click)="removeForm(element.Id)"
+            ></span>
+          </mat-cell>
+        </ng-container>
+
+        <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+        <mat-row *matRowDef="let row; columns: displayedColumns"></mat-row>
+      </mat-table>
+    </div>
+    <div class="with-align" *ngIf="dataSource.data.length === 0">
+      No Records Found
+    </div>
+  </div>
+</div>
+<mat-paginator
+  *ngIf="dataSource.data.length != 0 && length > 5"
+  [length]="length"
+  [pageSize]="pageSize"
+  [pageSizeOptions]="pageSizeOptions"
+  (page)="handlePageEvent($event)"
+>
+</mat-paginator>

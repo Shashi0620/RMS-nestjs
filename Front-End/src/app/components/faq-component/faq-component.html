@@ -1,0 +1,10 @@
+<div *ngIf="faqData != null || faqData != undefined">
+  <div
+    *ngFor="let faq of faqData.faq"
+    class="faq-item"
+    (click)="toggleAnswer(faq)"
+  >
+    <span style="font-size: large">{{ faq.question }}</span>
+    <p *ngIf="faq.showAnswer">{{ faq.answer }}</p>
+  </div>
+</div>

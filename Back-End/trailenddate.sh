@@ -1,0 +1,1 @@
+psql -U postgres -d RackNew -a -f E:/RakManagemnt/Ranknew/rack-management/Back-End/trialenddate.sql

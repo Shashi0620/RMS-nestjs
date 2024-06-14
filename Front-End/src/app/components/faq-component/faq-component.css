@@ -1,0 +1,15 @@
+.faq-item {
+  margin-bottom: 20px;
+  border: 1px solid #ddd;
+  padding: 10px;
+  border-radius: 5px;
+}
+
+h4 {
+  color: #333;
+}
+
+p {
+  color: #555;
+  margin-bottom: 0rem;
+}

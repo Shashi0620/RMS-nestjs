@@ -1,0 +1,311 @@
+<div class="main-content">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="card border-0">
+          <div class="card-block">
+            <div>
+              <div class="row">
+                <div class="col-md-8 ml-auto mr-auto">
+                  <h4 *ngIf="addForm">Create Notification Setting</h4>
+                  <h4 *ngIf="!addForm">Edit Notification Setting</h4>
+                  <form name="myForm" [formGroup]="notificationForm">
+                    <div class="row">
+                      <div class="col-md-6">
+                        <div class="form-group">
+                          <label for="title">Setting Name</label>
+                          <input
+                            type="text"
+                            class="form-control w-100"
+                            id="notificationName"
+                            formControlName="settingName"
+                            [ngClass]="{
+                              'is-invalid': submitted && f.settingName.errors
+                            }"
+                            name="settingName"
+                            [(ngModel)]="notificationSetting[0].settingName"
+                            placeholder="Enter Notification Setting Name"
+                          />
+                          <div
+                            *ngIf="submitted && f.settingName.errors"
+                            class="invalid-feedback"
+                          >
+                            <div *ngIf="f.settingName.errors.required">
+                              SettingName is required
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="form-group">
+                          <label for="title">To</label>
+                          <input
+                            type="text"
+                            class="form-control w-100"
+                            id="to"
+                            formControlName="to"
+                            [ngClass]="{
+                              'is-invalid': submitted && f.to.errors
+                            }"
+                            name="to"
+                            [(ngModel)]="notificationSetting[0].to"
+                            placeholder="Enter Notification Setting Email"
+                          />
+                          <div
+                            *ngIf="submitted && f.to.errors"
+                            class="invalid-feedback"
+                          >
+                            <div *ngIf="f.to.errors.required">
+                              Email is required
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      <!-- <div class="col-md-6" *ngIf="isEscalationRequired">
+                        <label for="title">To</label>
+                        <input type="text" class="form-control" id="too" formControlName="to" name="to"
+                          [(ngModel)]="notificationSetting[0].to" 
+                          placeholder="Enter Email"/>
+                      </div>                    -->
+                      <!-- <div class="col-md-6">
+                        <label for="title">Notification Type</label>
+                        <div class="col-md-6 mt-2">
+                          <input formControlName="notificationType" class="form-check-input" type="radio"
+                            name="notificationType" id="notificationType"
+                            [(ngModel)]="notificationSetting[0].notificationType"
+                            (change)="changenotificationType($event)" value="Email" />
+                          <label class="form-check-label" for="Email">
+                            Email
+                          </label>
+
+                          <span *ngIf="
+                              submitted && f?.notificationType?.errors?.required
+                            " class="text-danger">
+                            Notification is required
+                          </span>
+                        </div>
+                      </div> -->
+
+                      <!-- <div class="row">                       
+                      <div class="col-md-6" *ngIf="isEscalationRequired">
+                        <label for="title">To</label>
+                        <input type="text" class="form-control" id="to" formControlName="to" name="to"
+                          [(ngModel)]="notificationSetting[0].to" 
+                          placeholder="Enter Email"/>
+                          <div *ngIf="submitted && f.to.errors" class="invalid-feedback">
+                            <div *ngIf="f.to.errors.required">
+                              Email is required
+                            </div>
+                          </div>
+                      </div>                    -->
+                      <!-- <div class="col-md-6">
+                        <label for="title">Notification Type</label>
+                        <div class="col-md-6 mt-2">
+                          <input formControlName="notificationType" class="form-check-input" type="radio"
+                            name="notificationType" id="notificationType"
+                            [(ngModel)]="notificationSetting[0].notificationType"
+                            (change)="changenotificationType($event)" value="Email" />
+                          <label class="form-check-label" for="Email">
+                            Email
+                          </label>
+
+                          <span *ngIf="
+                              submitted && f?.notificationType?.errors?.required
+                            " class="text-danger">
+                            Notification is required
+                          </span>
+                        </div>
+                      </div> -->
+                    </div>
+                    <!-- <div class="row">
+                      <div class="col-md-6">
+                        <label for="flexCheckDefault">
+                          Check If Escalation Required
+                        </label>
+                        <input *ngIf="isEscalationRequired" class="form-check-input ml-4"
+                          [checked]="notification.isEscalationRequired" type="checkbox"
+                          (change)="onCheckboxChange($event)" />
+                      </div>
+                     
+                      <div class="col-md-6 mt-n4" *ngIf="isEscalationRequired">
+                        <label for="title">To</label>
+                        <input type="text" class="form-control" id="too" formControlName="to" name="to"
+                          [(ngModel)]="notificationSetting[0].to" 
+                          placeholder="Enter Email"/>
+                      </div>
+                    </div> -->
+                    <br />
+                    <div class="row">
+                      <div *ngIf="isEscalationRequired" class="col-md-6">
+                        <div class="form-group">
+                          <label for="noOfRemainder">No of Remainders</label>
+                          <select
+                            id="select_remainder"
+                            formControlName="noOfRemainder"
+                            class="form-control"
+                            (change)="onChangeRemainder($event.target.value)"
+                            [(ngModel)]="notificationSetting[0].noOfRemainder"
+                          >
+                            <option value="" selected disabled hidden>
+                              Select No of Remainders
+                            </option>
+                            <option *ngFor="let days of day">
+                              {{ days }}
+                            </option>
+                          </select>
+                        </div>
+                      </div>
+                      <br />
+                      <div *ngIf="isEscalationRequired" class="col-md-6">
+                        <div class="form-group">
+                          <label for="timeToEscalate"
+                            >No of days between Remainders</label
+                          >
+                          <select
+                            id="select_interval"
+                            formControlName="timeToEscalate"
+                            class="form-control"
+                            (change)="onChangeTimeInterval($event.target.value)"
+                            [(ngModel)]="
+                              notificationSetting[0]
+                                .timeIntervalBetweenNotificationsInDays
+                            "
+                          >
+                            <option value="" selected disabled hidden>
+                              Select Time interval between Remainders
+                            </option>
+                            <option *ngFor="let days of day">
+                              {{ days }}
+                            </option>
+                          </select>
+                        </div>
+                      </div>
+                    </div>
+                    <!-- <div *ngIf="isEscalation">
+                      <table class="table table-striped" id="table">
+                        <thead>
+                          <tr>
+                            <th class="col w-50">EscalationType</th>
+                            <th class="col">To</th>
+                            <th class="col">TimetoEscalate</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr>
+                            <td>
+                              <div class="row">
+                                <div class="col-md-6">
+                                  <select formControlName="escalationType" id="EscalationType"
+                                    class="form-control w-100-t" [value]="escalation.escalationType" (change)="
+                                      onChangeEscalationLevel(
+                                        $event.target.value
+                                      )
+                                    " aria-label="Default select example">
+                                    <option value="Escalation Level 1">
+                                      Escalation Level 1
+                                    </option>
+                                    <option value="Escalation Level 2">
+                                      Escalation Level 2
+                                    </option>
+                                  </select>
+                                </div>
+                              </div>
+                            </td>
+                            <td>
+                              <input type="text" class="form-control" id="too" formControlName="to" name="to" />
+                            </td>
+
+                            <div class="col-md-6">
+                              <select formControlName="timeToEscalate" class="form-control w-100-t" id="select_interval"
+                                [value]="escalation.timeIntervalBetweenNotificationsInDays" (change)="
+                                  onChangeTimeInterval($event.target.value)
+                                " aria-label="Default select example">
+                                <option value="1 Days">1 Day</option>
+                                <option value="2 Days">2 Days</option>
+                                <option value="3 Days">3 days</option>
+                              </select>
+                            </div>
+                          </tr>
+                          <tr>
+                            <td>
+                              <div class="row">
+                                <div class="col-md-6">
+                                  <select formControlName="escalationType" class="form-control w-100-t"
+                                    id="EscalationTypes" [value]="escalation.escalationType" (change)="
+                                      onChangeEscalationLevel(
+                                        $event.target.value
+                                      )
+                                    " aria-label="Default select example">
+                                    <option value="Escalation Level 1">
+                                      Escalation Level 1
+                                    </option>
+                                    <option value="Escalation Level 2">
+                                      Escalation Level 2
+                                    </option>
+                                  </select>
+                                </div>
+                              </div>
+                            </td>
+                            <td>
+                              <input type="text" class="form-control" id="to" formControlName="to" name="to" />
+                            </td>
+
+                            <div class="col-md-6">
+                              <select formControlName="timeToEscalate" class="form-control w-100-t"
+                                id="select_intervals" [value]="escalation.timeIntervalBetweenNotificationsInDays" (change)="
+                                  onChangeTimeInterval($event.target.value)
+                                " aria-label="Default select example">
+                                <option value="1 Days">1 Day</option>
+                                <option value="2 Days">2 Days</option>
+                                <option value="3 Days">3 days</option>
+                              </select>
+                            </div>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div> -->
+
+                    <div class="form-group">
+                      <button
+                        type="button"
+                        (click)="fetchNotification()"
+                        class="btn btn-danger mt-3 float-right"
+                        id="cancle_notification"
+                        title="Click to cancel notification creation"
+                      >
+                        Cancel
+                      </button>
+                      <button
+                        *ngIf="addForm"
+                        class="btn btn-primary mt-3 float-right"
+                        id="save_notification"
+                        data-toggle="tooltip"
+                        data-placement="bottom"
+                        title="Click to save notification"
+                        (click)="saveNotification()"
+                      >
+                        Save Notification
+                      </button>
+                      <button
+                        *ngIf="!addForm"
+                        (click)="updateNotificationById()"
+                        class="btn btn-primary mt-3 float-right"
+                        id="save_notification"
+                        data-toggle="tooltip"
+                        data-placement="bottom"
+                        title="Click to update notification"
+                      >
+                        Update Notification
+                      </button>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

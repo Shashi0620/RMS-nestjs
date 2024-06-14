@@ -1,0 +1,75 @@
+<div class="text-center">
+  <div *ngIf="UserObj" class="page-title">
+    <h2>Raise a ticket</h2>
+  </div>
+</div>
+<div *ngIf="UserObj" class="wrapper-box">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-6 offset-md-3">
+        <form [formGroup]="FormData" (ngSubmit)="onEnquiryAndContactUsSubmit(FormData.value)">
+         <div *ngIf ="UserObj"class="form-group">
+            <label for="fullname">Enter Email</label>
+            <input type="email" class="form-control" name="email" aria-describedby="emailHelp" placeholder="Enter Your email"
+              formControlName="email" />
+          </div>
+          <div class="form-group">
+            <input type="hidden" class="form-control" name="number" aria-describedby="number" placeholder="Enter number"
+              formControlName="id" />
+          </div>
+          <div class="form-group">
+            <input type="hidden" class="form-control" name="subject" aria-describedby="text" placeholder="Enter subject"
+              formControlName="subject" />
+          </div>
+          <div class="form-group">
+            <label for="Message">Message</label>
+            <textarea id="message" class="form-control" formControlName="message" name="message" rows="7">
+            </textarea>
+          </div>
+          
+          <input  #attachments type="file" (change)="onFileChanged($event)" #fileInput/>         
+          
+          <button id="submit" type="submit" class="btn btn-primary float-right" [disabled]="!FormData.valid" title="Click to submit message">
+            Submit
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div *ngIf="!UserObj"class="app">
+      <div class="container-fluid no-pdd-horizon" id="enquiryform">
+        <div class="row">
+          <div class="col-md-80 mr-auto ml-auto">
+            <div class="row">
+              <div
+                class="align-items-center"
+              >
+              <form [formGroup]="FormData" (ngSubmit)="onEnquiryAndContactUsSubmit(FormData.value)">
+                <div *ngIf ="!UserObj"class="form-group">
+                   <label for="Email">Enter Email</label>
+                   <input type="email" class="form-control" name="email" aria-describedby="emailHelp" placeholder="Enter Your email"
+                     formControlName="email" />
+                 </div>
+                 <div class="form-group">
+                  <input type="hidden" class="form-control" name="subject" aria-describedby="text" placeholder="Enter subject"
+                    formControlName="subject" />
+                </div>
+                 <div class="form-group">
+                   <label for="Message">Message</label>
+                   <textarea id="message" class="form-control" formControlName="message" name="message" rows="7">
+                   </textarea>
+                 </div>                         
+                 <input #attachments type="file" (change)="onFileChanged($event)" #fileInput />                
+                 <button id="submit" type="submit" class="btn btn-primary float-right" [disabled]="!FormData.valid" title="Click to submit message">
+                   Submit
+                 </button>
+               </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+</div>

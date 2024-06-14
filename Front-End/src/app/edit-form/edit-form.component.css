@@ -1,0 +1,24 @@
+.button {
+  margin-left: 100px;
+}
+
+.action_btn {
+  margin: 5px;
+}
+
+.form-group{
+  margin-bottom: 0px !important;
+  padding: 30px 60px 5px 60px;
+}
+
+.form-control{
+  font-size: 14px;
+}
+
+.btn-cont{
+  float: right;
+}
+
+.container{
+  max-width: 500px;
+}

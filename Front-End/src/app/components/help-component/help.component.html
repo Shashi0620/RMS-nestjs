@@ -1,0 +1,26 @@
+<div class="mini-fab-icon">
+  <div>
+    <i class="fa fa-info-circle col mt-1 mr-n1 pointer" cdkOverlayOrigin #trigger="cdkOverlayOrigin"
+    (click)="toggle(trigger)" aria-hidden="true">
+  </i>
+  </div>
+  <div>
+    <i class="fa fa-video-camera pointer" title="click for the video of this section" cdkOverlayOrigin #trigger="cdkOverlayOrigin" style="font-size: 21px;margin-top: 4px;"
+      aria-hidden="true" (click)="sectionsVideoPlayer(trigger)">
+    </i>
+  </div>
+</div>
+
+<ng-template  cdkConnectedOverlay [cdkConnectedOverlayOrigin]="trigger"
+  [cdkConnectedOverlayHasBackdrop]="true" (backdropClick)="isOpen=false" [cdkConnectedOverlayOpen]="isOpen">
+  <div class="container">
+    <div class="card">
+      <div class="card-body" style="max-height: 500px; overflow-y: auto;">
+        <blockquote>
+          <p [innerHTML]="support.support"></p>
+        </blockquote>
+      </div>
+      <div class="bi bi-x-circle-fill float-right-top pointer" (click)="isOpen=false"></div>
+    </div>
+  </div>
+</ng-template>

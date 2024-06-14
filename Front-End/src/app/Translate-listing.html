@@ -1,0 +1,69 @@
+<div class="page-title row">
+  <div class="col">
+    <h2 class="arrange-icon">
+      {{value}} Listing
+      <div>
+        <app-help [infoKey]="translateSupport"></app-help>
+      </div>
+    </h2>
+  </div>
+  <div class="col">
+    <button
+      class="btn btn-sm btn-primary mt-2 pull-right"
+      mat-button
+      (click)="openDialog('Add',{})"
+      mat-flat-button
+      title="Click to add new translatable word"
+    >
+      Add Row
+    </button>
+  </div>
+</div>
+<form #testForm="ngForm" (ngSubmit)="save()" novalidate>
+  <div class="mat-app-background basic-container">
+    <div *ngIf="dataSource.data.length > 0">
+      <table
+        mat-table
+        [dataSource]="dataSource"
+        class="mat-elevation-z8"
+        id="TranslateList"
+      >
+        <ng-container matColumnDef="Key" id="key">
+          <th mat-header-cell *matHeaderCellDef id="translate_key">Key</th>
+          <td mat-cell *matCellDef="let element">{{element.Key}}</td>
+        </ng-container>
+
+        <!-- Value Column -->
+        <ng-container matColumnDef="Value">
+          <th mat-header-cell *matHeaderCellDef id="translate_value">Value</th>
+          <td mat-cell *matCellDef="let element">{{element.Value}}</td>
+        </ng-container>
+        <ng-container matColumnDef="Actions">
+          <th mat-header-cell *matHeaderCellDef>Actions</th>
+          <td mat-cell *matCellDef="let element">
+            <span
+              id="edit_translate_{{element.Key}}"
+              class="bi-pencil-fill mr-3 edit-icon"
+              (click)="openDialog('Update',element)"
+              title="Click to edit translate word"
+            ></span>
+            <span
+              class="bi-trash-fill mr-2 delete-icon"
+              (click)="openDialog('Delete',element)"
+              title="Click to delete translate record"
+            ></span>
+          </td>
+        </ng-container>
+
+        <!-- Weight Column -->
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      </table>
+      <!-- <mat-paginator [pageSize]="dataSource.data.length"></mat-paginator> -->
+    </div>
+    <div class="with-align" *ngIf="dataSource.data.length === 0">
+      No Records Found
+    </div>
+  </div>
+</form>

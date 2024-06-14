@@ -1,0 +1,199 @@
+<div class="main-content">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="card border-0">
+          <div class="card-block">
+            <div>
+              <div class="col-md-8 ml-auto mr-auto">
+                <label>
+                  <h4 *ngIf="addForm">Create {{ value }}</h4>
+                  <h4 *ngIf="!addForm">Edit {{ value }}</h4>
+                </label>
+                <form
+                  name="storeForm"
+                  [formGroup]="storeForm"
+                  (ngSubmit)="saveStore()"
+                  id="storeForm"
+                >
+                  <div class="row">
+                    <div class="col">
+                      <div class="form-group">
+                        <label for="title">StoreName</label>
+                        <input
+                          type="text"
+                          class="form-control"
+                          id="storeName"
+                          placeholder="Enter  StoreName"
+                          formControlName="storeName"
+                          [ngClass]="{
+                            'is-invalid': submitted && f.storeName.errors
+                          }"
+                          name="storeName"
+                          [(ngModel)]="storeObj.storeName"
+                        />
+                        <div
+                          *ngIf="submitted && f.storeName.errors"
+                          class="invalid-feedback"
+                        >
+                          <div *ngIf="f.storeName.errors.required">
+                            StoreName is required
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row mt-3">
+                    <div class="col">
+                      <div class="form-group">
+                        <label for="title">Address</label>
+                        <textarea
+                          class="form-control"
+                          id="address"
+                          rows="3"
+                          placeholder="Enter  Address"
+                          formControlName="address"
+                          [ngClass]="{
+                            'is-invalid': submitted && f.address.errors
+                          }"
+                          name="address"
+                          [(ngModel)]="storeObj.address"
+                        ></textarea>
+                        <div
+                          *ngIf="submitted && f.address.errors"
+                          class="invalid-feedback"
+                        >
+                          <div *ngIf="f.address.errors.required">
+                            address is required
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div id="contents" #contents></div>
+
+                  <div class="row mt-3">
+                    <div class="col-md-6">
+                      <div class="form-group">
+                        <label for="title" placeholder="Placeholder"
+                          >Latitude</label
+                        >
+                        <input
+                          type="text"
+                          class="form-control"
+                          id="latitude"
+                          formControlName="latitude"
+                          name="latitude"
+                          [(ngModel)]="storeObj.latitude"
+                          [ngClass]="{
+                            'is-invalid': submitted && f.latitude.errors
+                          }"
+                        />
+                        <div
+                          *ngIf="submitted && f.latitude.errors"
+                          class="invalid-feedback"
+                        >
+                          <div *ngIf="f.latitude.errors.required">
+                            Select the location of {{ storeTranslate }} in map
+                            for latitude
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-6">
+                      <div class="form-group">
+                        <label for="description">Longitude</label>
+                        <input
+                          type="text"
+                          class="form-control"
+                          id="longitude"
+                          formControlName="longitude"
+                          name="longitude"
+                          [(ngModel)]="storeObj.longitude"
+                          [ngClass]="{
+                            'is-invalid': submitted && f.longitude.errors
+                          }"
+                        />
+                        <div
+                          *ngIf="submitted && f.longitude.errors"
+                          class="invalid-feedback"
+                        >
+                          <div *ngIf="f.longitude.errors.required">
+                            Select the location of {{ storeTranslate }} in map
+                            for longitude
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="row">
+                    <div class="col">
+                      <div class="form-group">
+                        <button
+                          type="button"
+                          routerLink="/stores"
+                          class="btn btn-danger mt-3 float-right"
+                          id="CancelStore"
+                          title="Click to cancel"
+                        >
+                          Cancel
+                        </button>
+                        <button
+                          *ngIf="addForm"
+                          class="btn btn-primary pull-right mt-3"
+                          data-toggle="tooltip"
+                          data-placement="bottom"
+                          title="Click to save {{ storeTranslate }}"
+                          id="CreateStore"
+                        >
+                          Save {{ value }}
+                        </button>
+
+                        <button
+                          *ngIf="!addForm"
+                          class="btn btn-primary pull-right mt-3"
+                          data-toggle="tooltip"
+                          data-placement="bottom"
+                          title="Click to update {{ storeTranslate }}"
+                          id="updateStore"
+                        >
+                          Update {{ value }}
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<html>
+  <head>
+    <title>Event Click LatLng</title>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
+
+    <!-- <link rel="stylesheet" type="text/css" href="../../styles.css" /> -->
+    <script type="module" src="./index.js"></script>
+  </head>
+  <body>
+    <div id="map"></div>
+
+    <!-- 
+      The `defer` attribute causes the callback to execute after the full HTML
+      document has been parsed. For non-blocking uses, avoiding race conditions,
+      and consistent behavior across browsers, consider loading using Promises.
+      See https://developers.google.com/maps/documentation/javascript/load-maps-js-api
+      for more information.
+      -->
+    <script
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB41DRUbKWJHPxaFjMAwdrzWzbVKartNGg&callback=initMap"
+      defer
+    ></script>
+  </body>
+</html>

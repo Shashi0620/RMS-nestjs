@@ -1,0 +1,40 @@
+<html lang="en">
+
+  <head>
+    <meta charset="UTF-8" />
+  </head>
+
+  <body>
+    <p>Dear <b>{{emailData.username}}</b>
+    <p style="width:400px;padding-left:20px;">Your
+      {{emailData.productTranslate}}
+      has crossed your configured limit in
+      {{emailData.trayName}}
+      that belongs to Rack{{emailData.trayId}}
+      , rackId
+      {{emailData.rackName}}. Your current quantity is
+      {{emailData.quantity}}
+      and your limit range is
+      {{emailData.lowerLimit}}
+      -
+      {{emailData.upperLimit}}
+
+      So please login
+	  <a href="{{link}}">
+         here
+         </a>      
+      to review the details and take appropriate action to avoid the remaining
+      reminders.
+    </p>
+
+    Regards,
+    <br />
+    <address>
+      From:
+      <a href="mailto:correspondence@rms.electems.com">Support RMS</a>.<br />
+      Visit us at:
+      <a href="rms.electems.com">rms.electems.com</a>
+    </address>
+  </body>
+
+</html>

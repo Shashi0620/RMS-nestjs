@@ -1,0 +1,66 @@
+name: Electem Windows RMS CI
+
+on:
+  push:
+    branches: [ "stage" ]
+  pull_request:
+    branches: [ "stage" ]
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: self-hosted
+    env: 
+      CI_COMMIT_MESSAGE: Continuous Integration Build Artifacts
+      CI_COMMIT_AUTHOR: Continuous Integration
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20.x'     
+      
+      - name: Run Backend
+        run: |
+          cd Back-End
+          start run-backend.bat
+          sleep 120
+          
+      - name: Run Frontend
+        run: |
+          cd Front-End
+          npm install --force
+          start npm start
+          sleep 120
+
+      - name: Cypress run
+        id: cy-test
+        continue-on-error: true
+        uses: cypress-io/github-action@v6
+        with:
+          working-directory: Front-End
+          install: false
+          browser: chrome
+          config-file: cypress.config.ts
+          spec: cypress/e2e/allspec.cy.ts     
+
+      # Commit and push all changed files.
+      - name: GIT Commit Build Artifacts (coverage, dist, devdist, docs)
+        # Only run on main branch push (e.g. after pull request merge).
+        if: github.event_name == 'push'
+        run: |
+          .\format-code.bat 
+          
+      - uses: actions/upload-artifact@v4
+        with:
+          name: cypress-screenshots
+          path: Front-End/cypress/screenshots
+          
+      - name: Release on Successful Testing
+        uses: softprops/action-gh-release@v1
+        if: steps.cy-test.outcome == 'success'
+        with:
+          tag_name: "Latest_Stable_Version"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_WF_TOKEN }}

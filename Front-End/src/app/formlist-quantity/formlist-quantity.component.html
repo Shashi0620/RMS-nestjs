@@ -1,0 +1,211 @@
+<mat-table
+  #table
+  [dataSource]="dataSource"
+  class="mat-elevation-z8 w-100"
+  id="store_view"
+>
+  <ng-container
+    matColumnDef="{{ column }}"
+    *ngFor="let column of displayedColumns"
+  >
+    <mat-header-cell
+      class="custom-mat-header-styling tableHeaderCellDiv"
+      *matHeaderCellDef
+    >
+      {{ column }}
+    </mat-header-cell>
+    <mat-cell *matCellDef="let element">
+      <div
+        *ngIf="
+          column != 'Quantity' &&
+          column != 'lowerLimit' &&
+          column != 'upperLimit' &&
+          column != 'notificationList'
+        "
+        [innerHTML]="element[column]"
+      ></div>
+      &nbsp;
+
+      <div *ngIf="column == 'Quantity' && isTrayView">
+        <input
+          id="updateQuantity"
+          type="number"
+          [value]="element[column]"
+          class="form-control"
+          (keyup)="
+            validateUserEnteredQuantityInCheckOut(
+              $event,
+              element.TotalQuantities
+            )
+          "
+        />
+      </div>
+      <div *ngIf="column == 'Quantity' && !isTrayView">
+        <input
+          id="quantity"
+          type="number"
+          class="form-control"
+          (keyup)="
+            validateUserEnteredQuantityInCheckIn(
+              $event,
+              element.TotalQuantities
+            )
+          "
+        />
+      </div>
+      <div *ngIf="column == 'Actions' && isTrayView">
+        <span
+          id="save_tray"
+          class="bi-bag-plus-fill context-menu mr-3"
+          (click)="updateQuantityOnCheckout(element.Id)"
+          title="Checkout {{ value }} to {{ tray }}"
+        >
+        </span>
+      </div>
+      <!-- <div *ngIf="column == 'Actions' && quantity != null">
+        <span
+          class="bi-trash-fill context-menu delete-icon mr-3"
+          data-toggle="tooltip"
+          data-placement="bottom"
+          title="Click here to delete {{ value }}"
+          (click)="deleteItem(element.Id)"
+        ></span>
+      </div> -->
+      <div *ngIf="column == 'Actions' && !isTrayView">
+        <span
+          class="bi-bag-plus-fill context-menu mr-3"
+          id="save_tray"
+          (click)="onClickUpdateQuantityOnCheckIn(element.Id)"
+          title="Checkin {{ value }} from {{ tray }}"
+        >
+        </span>
+      </div>
+
+      <div *ngIf="column == 'Actions' && isTrayView">
+        <span
+          id="edit_notification"
+          class="bi-bell-fill ml-1 notification-icon"
+          data-toggle="modal"
+          data-target="#exampleModal"
+          data-placement="bottom"
+          (click)="getUpperAndLowerLimit(element.Id, trayId)"
+          title="Click here to set the notification"
+        ></span>
+      </div>
+      <!-- 
+      <div *ngIf="column == 'Actions' && quantity != null">
+        <span
+          class="bi-pencil-fill mr-3 edit-icon"
+          data-toggle="modal"
+          data-toggle="modal"
+          data-target="#exampleModal"
+          data-placement="bottom"
+          id="edit_notification"
+          title="Click here edit the notification setting"
+          (click)="getUpperAndLowerLimit(element.Id, trayId)"
+        ></span>
+      </div> -->
+
+      <div
+        class="modal fade"
+        id="exampleModal"
+        tabindex="-1"
+        role="dialog"
+        aria-labelledby="exampleModalLabel"
+        aria-hidden="false"
+      >
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLabel">
+                Notification Setting for this {{ tray }}
+              </h5>
+              <button
+                type="button"
+                class="close"
+                data-dismiss="modal"
+                aria-label="Close"
+              >
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body modal-body row justify-content-md-center">
+              <div class="row">
+                <div class="col-md-6">
+                  <label for="lowerLimit">LowerLimit</label>
+                  <input
+                    type="number"
+                    id="lowerLimit"
+                    class="form-control"
+                    [(ngModel)]="lowerLimit"
+                    (keyup)="onLowerLimit($event)"
+                  />
+                </div>
+
+                <div class="col-md-6">
+                  <label for="higherLimit">HigherLimit</label>
+                  <input
+                    type="number"
+                    id="higherLimit"
+                    class="form-control"
+                    [(ngModel)]="upperLimit"
+                    (keyup)="onUpperLimit($event)"
+                  />
+                </div>
+              </div>
+
+              <div class="row mt-2">
+                <div class="col">
+                  <label for="notification">Select Notification</label>
+                  <ng-select
+                    id="select_notifiction"
+                    [items]="notificationList"
+                    bindLabel="settingName"
+                    bindValue="id"
+                    [(ngModel)]="notificationSettngFk"
+                  ></ng-select>
+                </div>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button
+                id="close"
+                type="button"
+                title="Click to close notification setting form"
+                class="btn btn-danger mb-1"
+                data-dismiss="modal"
+              >
+                Close
+              </button>
+
+              <div>
+                <button
+                  id="update_notification"
+                  class="btn btn-primary mr-2 bi-save"
+                  data-toggle="tooltip"
+                  data-placement="bottom"
+                  title="Click to save notification setting"
+                  (click)="updateUpperAndLowerLimit()"
+                  data-dismiss="modal"
+                >
+                  Save Notification
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </mat-cell>
+  </ng-container>
+  <br />
+  <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+  <mat-row
+    *matRowDef="let row; columns: displayedColumns"
+    id="matrow"
+  ></mat-row>
+</mat-table>
+
+<!-- <mat-paginator #paginator [pageSize]="dataSource.data.length"></mat-paginator> -->
+<!-- <div class="with-align" *ngIf="dataSource.data.length === 0">
+  No Records Found
+</div> -->

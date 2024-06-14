@@ -1,0 +1,7 @@
+node_modules
+package-lock.json
+*pack
+/dist/*
+cypress/results/*
+cypress/screenshots/*
+src/environments/environment.ts

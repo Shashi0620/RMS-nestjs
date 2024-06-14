@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+   <head>
+      <meta charset="UTF-8">
+   </head>
+   <body>     
+			<p>Dear <b>{{emailData.username}}</b>,</p>
+      <p style="width:400px;padding-left:20px;">We welcome you to Rack Management System. This email is to inform you that you have successfully registered with us. To continue, please Click  
+         <a href="{{link}}/api/user/activation/{{emailData.clientFk}}/{{emailData.id}}">
+         here
+         </a> to Activate your account.
+      </p>
+
+      Regards, <br />   
+      <address>
+      From: <a href="mailto:correspondence@rms.electems.com">Support RMS</a>.<br> 
+      Visit us at: <a href="rms.electems.com">rms.electems.com</a>
+      </address>
+   </body>
+</html>

@@ -1,0 +1,193 @@
+<div>
+  <div class="page-title" *ngIf="trayViewFlag">
+    <span
+      >Checkout
+      <a
+        class="dropdown-toggle"
+        type="button"
+        id="product-dropdownMenu"
+        data-bs-toggle="dropdown"
+        aria-expanded="false"
+        style="border: 1.5px solid green; padding: 6px"
+      >
+        {{ this.selectedTemplate ? '' : dropdownValue }}
+        {{ this.selectedTemplate?.name }}
+      </a>
+      {{ itemTranslate }} from {{ trayTranslate }}
+
+      <div class="row pull-right">
+        <app-help
+          class="float-right"
+          [infoKey]="helpSection"
+          style="
+            font-size: 20px;
+            cursor: pointer;
+            margin: 13px;
+            margin-top: 0.5rem !important;
+          "
+        ></app-help>
+      </div>
+
+      <div
+        class="dropdown-menu"
+        aria-labelledby="dropdownMenu"
+        id="selectProduct"
+      >
+        <div class="nav-item" *ngFor="let template of associatedtemplateList">
+          <button
+            class="btn btn-primaryy rounded-pill px-3 mb-2 mb-lg-0"
+            (click)="onSelectedTemplate(template)"
+          >
+            <div class="d-flex align-items-center" id="selectTemplates">
+              <div>{{ template.name }}</div>
+            </div>
+          </button>
+        </div>
+      </div>
+
+      <div
+        id="switchToProductView"
+        class="row pull-right"
+        style="
+          margin-left: 800px;
+          margin-bottom: 5px;
+          position: absolute;
+          margin-top: -60px;
+          right: 17px;
+        "
+      >
+        <div class="col">
+          <button
+            type="button"
+            id="tray view"
+            (click)="changePage('racklayout', rackId, rackName)"
+            class="btn btn-danger mt-3 float-right"
+            title="Click to go for {{ rackTranslate }} view"
+          >
+            Back to {{ rackTranslate }}
+          </button>
+          <button
+            class="btn btn-primary float-right mt-3"
+            id="Switch To product View"
+            data-toggle="tooltip"
+            data-placement="bottom"
+            title="Click to Checkin {{ itemTranslate }}"
+            (click)="switchToProduct()"
+          >
+            Checkin {{ itemTranslate }} to {{ trayTranslate }}
+          </button>
+          <!-- <button class="btn btn-primary float-right mt-3" id="Switch To Tray View" data-toggle="tooltip" data-placement="bottom"
+              title="Click to select existing products" (click)="retriveItems()">
+              Checkout {{value}} from {{tray}}
+            </button> -->
+        </div>
+      </div>
+    </span>
+  </div>
+
+  <div
+    class="alert"
+    *ngIf="showWarningMessage"
+    style="padding: 2px; color: rgb(156, 17, 17); top: 60px; left: 50px"
+  >
+    <strong id="noProductAlert"
+      >There are no {{ itemTranslate }} in this {{ trayTranslate }}, please
+      click on "Checkin {{ itemTranslate }} to {{ trayTranslate }}" to add
+      {{ itemTranslate }} to this {{ trayTranslate }} {{ trayName }}!</strong
+    >
+  </div>
+
+  <div class="page-title" *ngIf="productViewFlag">
+    <span
+      >Checkin
+      <a
+        class="dropdown-toggle"
+        type="button"
+        id="product-dropdownMenu"
+        data-bs-toggle="dropdown"
+        aria-expanded="false"
+        style="border: 1.5px solid green; padding: 6px"
+      >
+        {{ this.selectedTemplate ? '' : productViewDropdownValue }}
+        {{ this.selectedTemplate?.name }}
+      </a>
+      into {{ trayTranslate }} {{ trayName }}
+
+      <div class="row pull-right">
+        <app-help
+          class="float-right"
+          [infoKey]="helpSection"
+          style="
+            font-size: 20px;
+            cursor: pointer;
+            margin: 13px;
+            margin-top: 0.5rem !important;
+          "
+        ></app-help>
+      </div>
+
+      <div
+        class="dropdown-menu"
+        aria-labelledby="dropdownMenu"
+        id="selectProduct"
+      >
+        <div class="nav-item" *ngFor="let template of templateList">
+          <button
+            class="btn btn-primaryy rounded-pill px-3 mb-2 mb-lg-0"
+            (click)="onSelectedTemplate(template)"
+          >
+            <div class="d-flex align-items-center" id="selectTemplates">
+              <div>{{ template.name }}</div>
+            </div>
+          </button>
+        </div>
+      </div>
+      <div
+        id="switch_button"
+        class="row pull-right"
+        style="
+          margin-left: 800px;
+          margin-bottom: 5px;
+          position: absolute;
+          margin-top: -60px;
+          right: 17px;
+        "
+      >
+        <div class="col">
+          <button
+            type="button"
+            id="tray view"
+            (click)="changePage('racklayout', rackId, rackName)"
+            class="btn btn-danger mt-3 float-right"
+            title="Click to go for {{ rackTranslate }} view"
+          >
+            Back to {{ rackTranslate }}
+          </button>
+          <!-- <button class="btn btn-primary float-right mt-3" id="Switch To Tray View" data-toggle="tooltip"
+              data-placement="bottom" title="Click to select existing products" (click)="switchToProduct()">
+              Checkin {{value}} to {{tray}}
+            </button> -->
+          <button
+            class="btn btn-primary float-right mt-3"
+            id="Switch To Tray View"
+            data-toggle="tooltip"
+            data-placement="bottom"
+            title="Click to Checkout {{ itemTranslate }}"
+            (click)="switchToTrayView()"
+          >
+            Checkout {{ itemTranslate }} from {{ trayTranslate }}
+          </button>
+        </div>
+      </div>
+    </span>
+  </div>
+
+  <app-formlist-quantity
+    #child
+    [selectedTemplate]="selectedTemplate"
+    [isTrayView]="trayViewFlag"
+    [trayId]="trayId"
+    [rackId]="rackId"
+    [rackName]="rackName"
+  ></app-formlist-quantity>
+</div>

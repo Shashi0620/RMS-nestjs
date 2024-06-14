@@ -1,0 +1,38 @@
+-----------------
+Nginx
+-----------------
+To kill all the nginx services on windows use: @taskkill /f /im nginx.exe
+
+To Restart: nginx  - D:\apps\nginx-1.24.0>@taskkill /f /im nginx.exe && start nginx.exe
+
+-----------------
+BE
+-----------------
+Run "deploy.bat" under From Rack-Management\Back-End. 
+
+-----------------
+FE
+-----------------
+Run "deploy.bat" under Rack-Management\Front-End to build, deploy to nginx & stop nginx server. 
+
+Then do "start nginx.exe"
+
+-----------------
+TODO
+-----------------
+- Scheduler
+- Run Nodejs in background - run deploy.bat (do not close the command prompt) 
+	cd /mnt/d/projects/RMS/codebase/Rack-Management/Back-End/
+
+
+Postgres SQL Commands(dump/export)
+- pg_dump -h 192.168.0.102 -p 15432 -d rackmanagement -U postgres -n public > C:/projects/sample-data-seq1.sql
+
+
+
+
+Postgres SQL Commands(import)
+- psql -U postgres -p 15432 -W -f C:/project/sample-dataForTesting-seq.sql
+
+Redirect logs to another file use this command
+command 1>>C:\projects\rackmanagement-github\Rack-Management\lint.log

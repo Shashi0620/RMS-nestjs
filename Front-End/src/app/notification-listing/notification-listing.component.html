@@ -1,0 +1,55 @@
+<div class="page-title row">
+  <div class="col">
+    <h2 class="arrange-icon">Notification Settings Listing
+      <app-help [infoKey]="notificationSettingSupport"></app-help>
+    </h2>
+  </div>
+  <div class="col">
+    <button id="Add_Notification" class="btn btn-sm btn-primary mt-2 pull-right" data-toggle="tooltip"
+      data-placement="bottom" title="Click to create notification" (click)="addNewNotification()">
+      Add Notification
+    </button>
+  </div>
+</div>
+
+<div class="mat-app-background basic-container">
+  <div *ngIf="dataSource.data.length > 0 ">
+  <mat-table #table [dataSource]="dataSource" class="mat-elevation-z8" id="Notificationlist">
+    <ng-container matColumnDef="settingName">
+      <mat-header-cell *matHeaderCellDef class="text-bold">
+        Name
+      </mat-header-cell>
+      <mat-cell *matCellDef="let element">
+        {{ element.settingName }}
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="notificationType">
+      <mat-header-cell *matHeaderCellDef class="text-bold">
+        NotificationType
+      </mat-header-cell>
+      <mat-cell *matCellDef="let element">
+        {{ element.notificationType }}
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="actions" class="text-bold">
+      <mat-header-cell *matHeaderCellDef class="text-bold">
+        Actions
+      </mat-header-cell>
+      <mat-cell *matCellDef="let element">
+        <span id="edit_notification" class="bi-pencil-fill mr-3 edit-icon" data-toggle="tooltip" data-placement="bottom"
+          title="Click here to edit notification" routerLink="/editNotification/{{ element.id }}"></span>
+        <span class="bi-trash-fill context-menu delete-icon mr-3" id="delete_notification" data-toggle="tooltip"
+          data-placement="bottom" title="Click here to delete notification" (click)="deleteNotification(element.id)"></span>
+      </mat-cell>
+    </ng-container>
+    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+    <mat-row *matRowDef="let row; columns: displayedColumns"></mat-row>
+  </mat-table>
+</div>
+  <div class="with-align" *ngIf="dataSource.data.length === 0">
+    No Records Found
+  </div>
+</div>
+<!-- <mat-paginator #paginator [pageSize]="5"></mat-paginator> -->

@@ -1,0 +1,17 @@
+.center {
+  margin-top: 10%;
+}
+
+.backdrop {
+  backdrop-filter: blur(1.5px);
+}
+
+.with-align {
+  text-align: center;
+  justify-content: center;
+}
+
+.tableHeaderCellDiv {
+  resize: none;
+  overflow: hidden;
+}

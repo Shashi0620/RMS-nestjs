@@ -1,0 +1,1279 @@
+<div *ngIf="UserObj && isDesktopDevice">
+  <nav *ngIf="!menuService.isTrayMenu; else newNav">
+    <div class="header navbar navbar-light menu-box shadow-sm">
+      <div class="header-container">
+        <div *ngIf="isLoading$ | async" class="busy-indicator">
+          <div class="spinner"></div>
+          <div class="message">Loading...</div>
+        </div>
+
+        <div *ngIf="isPlanImg">
+          <ul class="nav-left">
+            <li id="user-profile dropdown" class="user-profile dropdown mr-5">
+              <a href="">
+                <img
+                  src="assets/img/EBS.jpg"
+                  class="profile-img img-fluid"
+                  width="150"
+                  height="100"
+                  alt=""
+                />
+              </a>
+            </li>
+          </ul>
+        </div>
+        <div id="menu-section">
+          <ul
+            class="nav-left mr-2"
+            *ngFor="let item of menuObject; let i = index"
+          >
+            <li class="item" *ngIf="item.clientFk == null">
+              <button
+                class="btn btn-primaryy border border-primary rounded-pill px-3 mb-2 mb-lg-0"
+                (click)="refreshPage(item.action, i)"
+                [ngClass]="{active: tab === i}"
+              >
+                <span class="d-flex align-items-center">
+                  <i class=""></i>
+                  <span id="1" class="small">{{ item.label }}</span>
+                </span>
+              </button>
+            </li>
+          </ul>
+        </div>
+
+        <ul class="nav-left mr-2">
+          <li class="item dropdown pdd-right-10 text-color">
+            <button
+              [ngClass]="{active: templateTabAddColor === product}"
+              class="btn btn-primaryy border border-primary rounded-pill px-3 mb-2 mb-lg-0"
+              id="dropdown"
+              data-toggle="dropdown"
+            >
+              <span class="dropdown-toggle d-flex align-items-center">
+                <i class=""></i>
+                <span id="1" class="small">{{ product }}</span>
+              </span>
+            </button>
+            <div
+              class="dropdown-menu"
+              aria-labelledby="dropdownMenu"
+              id="notification"
+            >
+              <div
+                class="nav-down mr-2"
+                *ngFor="let item of menuObject; let i = index"
+              >
+                <div class="menuObj" *ngIf="item.clientFk != null">
+                  <button
+                    id="products"
+                    class="btn btn-primaryy rounded-pill px-3 mb-2 mb-lg-0"
+                    (click)="refreshPage(item.action, i)"
+                    [ngClass]="{active: tab === i}"
+                    (click)="select(item.label, i)"
+                  >
+                    <span class="d-flex align-items-center">
+                      <i class=""></i>
+                      <span class="small" id="selectTemplate">{{
+                        item.label
+                      }}</span>
+                    </span>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </li>
+        </ul>
+
+        <ul class="nav-right d-flex justify-content-end">
+          <li
+            id="dropdownbell"
+            class="notifications dropdown"
+            title="Click to see notifications"
+          >
+            <a
+              *ngIf="ifNewNotification === false"
+              (click)="fetchAllNotifications()"
+              data-toggle="dropdown"
+            >
+              <i class="bi-bell" style="font-size: 24px"></i>
+              <!-- <span *ngIf="afterClickOnNotification" class="num"></span> -->
+            </a>
+            <a
+              *ngIf="ifNewNotification === true"
+              (click)="fetchAllNotifications()"
+              data-toggle="dropdown"
+            >
+              <i
+                class="bi-bell"
+                style="font-size: 24px; color: rgb(7 255 6)"
+              ></i>
+              <span class="badge rounded-pill badge-notification bg-danger">{{
+                newnotifications.length
+              }}</span>
+            </a>
+            <ul class="dropdown-menu">
+              <li class="notice-header">
+                <i class="bi-bell pdd-right-10"></i> <span>Notifications</span>
+              </li>
+              <li>
+                <ul
+                  id="newNotificationsList"
+                  class="list-info overflow-y-auto relative scrollable"
+                >
+                <div *ngIf="notifications">
+                  <div *ngIf="notifications.length > 0">
+                    <div *ngFor="let item of notifications; let i = index">
+                      <li>
+                        <div class="mt-2 ml-2">
+                          <img
+                            *ngIf="notifications[0].status === 'SENT'"
+                            class="ml-2"
+                            [src]="notificationImage"
+                            width="25"
+                            height="25"
+                            alt=""
+                          />
+                          <img
+                            *ngIf="notifications[0].status === 'NEW'"
+                            class="ml-2"
+                            src="assets/img/notificationsent.jpg"
+                            width="20"
+                            height="20"
+                            alt=""
+                          />
+                        </div>
+                        <div class="info">
+                          <notification-view-component
+                            [notificationID]="item.id"
+                          ></notification-view-component>
+                          <span class="title">
+                            <span class="font-size-18 text-dark">
+                              {{ notifications[i].email }}
+                              Has
+                              {{ notifications[i].notificationType }}
+                              {{
+                                notifications[i].createdAt | date: 'shortTime'
+                              }}
+                            </span>
+                          </span>
+                        </div>
+                      </li>
+                    </div>
+                  </div>
+                </div>
+                </ul>
+              </li>
+            </ul>
+          </li>
+          <li class="user-profile dropdown" id="user-profile">
+            <a
+              *ngIf="isSuperAdmin"
+              href=""
+              id="dropdown-Toggle"
+              class="dropdown-toggle"
+              data-toggle="dropdown"
+            >
+              <div class="user-info">
+                <span class="name pdd-right-5">{{ UserObj.username }}</span>
+              </div>
+            </a>
+            <a *ngIf="isOtherUser" data-toggle="dropdown">
+              <img
+                [src]="profile.image"
+                class="profile-img img-fluid"
+                width="100"
+                height="100"
+                alt=""
+              />
+            </a>
+            <ul class="dropdown-menu">
+              <div class="image-container">
+                <img
+                  [src]="profile.image"
+                  class="profile-img img-fluid"
+                  alt=""
+                />
+              </div>
+              <div class="user-info">
+                <span class="name pdd-left-50">{{ userProfileName }}</span>
+              </div>
+              <li>
+                <a
+                  class="Profile"
+                  *ngIf="isOtherUser"
+                  (click)="fetchUserProfileFK()"
+                  data-toggle="tooltip"
+                  data-placement="bottom"
+                  id="Update Profile"
+                  title="Update Profile"
+                >
+                  <i class="ti-user pdd-right-10"></i> <span>Edit Profile</span>
+                </a>
+              </li>
+              <li>
+                <a
+                  class="Profile"
+                  *ngIf="isOtherUser"
+                  data-toggle="tooltip"
+                  data-placement="bottom"
+                  title="Change Password"
+                  id="Change Password"
+                  data-bs-toggle="modal"
+                  data-bs-target="#changePassword"
+                >
+                  <i class="fa fa-lock pdd-right-10"></i>
+                  <span>Change Password</span>
+                </a>
+              </li>
+              <li>
+                <a
+                  class="Profile"
+                  *ngIf="isOtherUser"
+                  href="http://electems.com/support"
+                  target="_blank"
+                >
+                  <i class="fa fa-address-book pdd-right-10"></i>
+                  <span>Contact Us</span>
+                </a>
+              </li>
+              <li role="separator" class="divider"></li>
+              <li>
+                <a
+                  class="Profile"
+                  id="logout"
+                  (click)="logout()"
+                  data-toggle="tooltip"
+                  data-placement="bottom"
+                  title="Logout"
+                >
+                  <i class="fa fa-sign-out pdd-right-10"></i>
+                  <span>Logout</span>
+                </a>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+  <alert></alert>
+  <div class="main-content">
+    <div class="container-fluid"><router-outlet></router-outlet></div>
+  </div>
+  <div
+    class="modal"
+    id="changePassword"
+    tabindex="-1"
+    aria-labelledby="feedbackModalLabel"
+    aria-hidden="true"
+  >
+    <div class="modal-sm modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header bg-gradient-primary-to-secondary p-2">
+          <h5 class="modal-title font-alt text-white" id="feedbackModalLabel">
+            Change Password
+          </h5>
+          <button
+            id="Close"
+            class="btn-close btn-close-white"
+            type="button"
+            data-bs-dismiss="modal"
+            aria-label="Close"
+            (click)="changePassword()"
+          ></button>
+        </div>
+        <div class="modal-body border-0 p-4">
+          <app-change-password></app-change-password>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!--Mobile View Top Bar-->
+
+<div *ngIf="UserObj && isMobile">
+  <nav *ngIf="!menuService.isTrayMenu; else newNav">
+    <div class="header navbar navbar-light menu-box shadow-sm">
+      <div class="header-container">
+        <div *ngIf="isPlanImg">
+          <ul class="nav-left">
+            <li id="user-profile dropdown" class="user-profile dropdown mr-5">
+              <a href="">
+                <!-- <img src="assets/img/EBS.jpg" class="profile-img img-fluid" width="150" height="100" alt="" /> -->
+                <i class="fa fa-search search-icon" aria-hidden="true"></i>
+              </a>
+            </li>
+          </ul>
+        </div>
+        <ul class="nav-right d-flex justify-content-end">
+          <li class="user-profile dropdown" id="user-profile">
+            <a *ngIf="isOtherUser" data-toggle="dropdown">
+              <img
+                [src]="profile.image"
+                class="profile-img img-fluid"
+                width="100"
+                height="100"
+                alt=""
+              />
+            </a>
+            <ul class="dropdown-menu">
+              <div class="image-container">
+                <img
+                  [src]="profile.image"
+                  class="profile-img img-fluid"
+                  alt=""
+                />
+              </div>
+              <div class="user-info">
+                <span class="name pdd-left-50">{{ UserObj.username }}</span>
+              </div>
+              <li role="separator" class="divider"></li>
+              <li>
+                <a
+                  class="Profile"
+                  id="logout"
+                  (click)="logout()"
+                  data-toggle="tooltip"
+                  data-placement="bottom"
+                  title="Logout"
+                >
+                  <i class="fa fa-sign-out pdd-right-10"></i>
+                  <span>Logout</span>
+                </a>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+  <alert></alert>
+  <div class="main-content">
+    <div class="container-fluid"><app-rack-list></app-rack-list></div>
+  </div>
+</div>
+
+<!--Mobile View Top Bar-->
+<div *ngIf="!UserObj">
+  <nav
+    class="navbar navbar-expand-lg navbar-light fixed-top shadow-sm"
+    id="mainNav"
+    *ngIf="!UserObj"
+  >
+    <div class="container px-5">
+      <span class="d-flex align-items-center">
+        <img
+          src="assets/img/EBS.jpg"
+          class="profile-img img-fluid"
+          width="45"
+          height="40"
+          alt=""
+          style="margin-right: 40px"
+        />
+        <a class="navbar-brand" href="#page-top"
+          ><span class="font-weight-bold title-pointer">RMS</span></a
+        >
+        <span class="by-text font-weight-bold">&nbsp;by</span>
+        <a class="navbar-brand" href="https://electems.com/" target="_blank"
+          ><span class="font-weight-bold title-pointer">&nbsp;EBS</span></a
+        >
+      </span>
+      <button
+        class="navbar-toggler"
+        type="button"
+        data-toggle="collapse"
+        data-target="#navbarResponsive"
+        aria-controls="navbarResponsive"
+        aria-expanded="false"
+        aria-label="Toggle navigation"
+      >
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarResponsive">
+        <ul class="navbar-nav ms-auto me-4 my-3 my-lg-0">
+          <li class="nav-item">
+            <button class="btn btn-primary rounded-pill px-3 mb-2 mb-lg-0">
+              <span class="d-flex align-items-center">
+                <i class="icon icon-medium fa fa-list-alt"></i>
+
+                <a href="#features"
+                  ><span class="small">&nbsp; Features</span></a
+                >
+              </span>
+            </button>
+          </li>
+          <li class="nav-item">
+            <button class="btn btn-primary rounded-pill px-3 mb-2 mb-lg-0">
+              <span class="d-flex align-items-center">
+                <i class="icon icon-medium fa fa-list-alt"></i>
+
+                <a href="#usecases"
+                  ><span class="small">&nbsp; Use Cases</span></a
+                >
+              </span>
+            </button>
+          </li>
+          <li class="nav-item">
+            <button
+              class="btn btn-primary rounded-pill px-3 mb-2 mb-lg-0"
+              data-bs-toggle="modal"
+              data-bs-target="#loginModal"
+            >
+              <span class="d-flex align-items-center">
+                <i class="icon icon-medium fa fa-lock"></i>
+                <span class="small" id="login-button">&nbsp; Login</span>
+              </span>
+            </button>
+          </li>
+          <li class="nav-item">
+            <button
+              class="btn btn-primary rounded-pill px-3 mb-2 mb-lg-0"
+              data-bs-toggle="modal"
+              data-bs-target="#registerModal"
+            >
+              <span class="d-flex align-items-center">
+                <i class="icon icon-medium fa fa-user"></i>
+                <span class="small">&nbsp; Register</span>
+              </span>
+            </button>
+          </li>
+          <li class="nav-item">
+            <a
+              class="btn btn-primary rounded-pill px-3 mb-2 mb-lg-0"
+              href="http://electems.com/support"
+              target="_blank"
+            >
+              <span class="d-flex align-items-center">
+                <i class="icon icon-medium fa fa-envelope"></i>
+                <span class="small">&nbsp; ContactUs</span>
+              </span>
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+  <!-- Terms conditions-->
+  <!-- Terms conditio-->
+  <!-- Mashead header-->
+  <!-- Carousel -->
+  <div class="masthead">
+    <div class="container">
+      <div
+        id="carouselExampleControls"
+        class="carousel slide"
+        data-ride="carousel"
+        data-interval="10000"
+      >
+        <div class="carousel-inner">
+          <div class="carousel-item active center">
+            <picture>
+              <source
+                media="(orientation: landscape)"
+                srcset="assets/img/chat1.PNG"
+              />
+              <source
+                media="(orientation: portrait)"
+                srcset="assets/img/chat1-mobile.PNG"
+              />
+
+              <img
+                class="d-block mx-auto"
+                src="assets/img/chat1.PNG"
+                style="width: 900px"
+              />
+            </picture>
+            <br />
+            <div class="carousel-caption d-none d-md-block content-title">
+              <h2 class="text-dark"></h2>
+              <br />
+              <br />
+              <p class="text-dark"></p>
+            </div>
+          </div>
+          <div class="carousel-item center">
+            <picture>
+              <source
+                media="(orientation: landscape)"
+                srcset="assets/img/chat2.PNG"
+              />
+              <source
+                media="(orientation: portrait)"
+                srcset="assets/img/chat2-mobile.PNG"
+              />
+
+              <img
+                class="d-block mx-auto"
+                src="assets/img/chat2.PNG"
+                style="width: 900px"
+              />
+            </picture>
+            <br />
+            <div class="carousel-caption d-none d-md-block content-title">
+              <h2 class="text-dark"></h2>
+              <br />
+              <br />
+              <p class="text-dark"></p>
+            </div>
+          </div>
+          <div class="carousel-item center">
+            <img
+              class="d-block mx-auto img-border"
+              src="assets/img/trayrack.jpg"
+            />
+            <br />
+            <div class="carousel-caption d-none d-md-block content-title">
+              <h2 class="text-dark">Solution 1</h2>
+              <p class="text-dark">
+                In this section user can search the product name in the search
+                and the user can see the listing of product available in Rack,
+                Tray and Store.
+              </p>
+            </div>
+          </div>
+          <div class="carousel-item center">
+            <img
+              class="d-block mx-auto img-border"
+              src="assets/img/tray-view.png"
+            />
+            <br />
+            <div class="carousel-caption d-none d-md-block solution2">
+              <h2 class="text-dark" style="line-height: 0.2rem">Solution 2</h2>
+              <p class="text-dark">
+                This section shows the searched product in the solution 1 with
+                green border to know the position of rack
+              </p>
+            </div>
+          </div>
+          <div class="carousel-item center">
+            <img
+              class="d-block mx-auto img-border"
+              src="assets/img/hospitalview.png"
+            />
+            <br />
+            <div class="carousel-caption d-none d-md-block solution2">
+              <h2 class="text-dark" style="line-height: 0.2rem">Solution 5</h2>
+              <p class="text-dark">
+                Keep track of your Equipment across your facility
+              </p>
+            </div>
+          </div>
+        </div>
+        <span
+          class="carousel-control-prev"
+          href="#carouselExampleControls"
+          role="button"
+          data-slide="prev"
+        >
+          <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+          <span class="sr-only">Previous</span>
+        </span>
+        <span
+          class="carousel-control-next"
+          href="#carouselExampleControls"
+          role="button"
+          data-slide="next"
+        >
+          <span class="carousel-control-next-icon" aria-hidden="true"></span>
+          <span class="sr-only">Next</span>
+        </span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Quote/testimonial aside-->
+  <div class="feat pt-4 pb-5">
+    <aside class="text-center bg-gradient-primary-to-secondary">
+      <div class="container px-5">
+        <div class="row gx-5 justify-content-center">
+          <div class="col-xl-8">
+            <div
+              class="h2 text-white"
+              style="line-height: 35px; font-size: x-large"
+            >
+              "Rack Management System (RMS) - A rack shelf organizer with
+              features to define your product, arrange them as they are at your
+              branch, and set alerts as per your requirements."
+            </div>
+            <!-- <img class="img" src="assets/img/tnw-logo.svg" alt="..." /> -->
+          </div>
+        </div>
+      </div>
+    </aside>
+  </div>
+
+  <!-- Platform Overview-->
+  <div id="features">
+    <div class="feat pt-5 pb-5">
+      <div class="container">
+        <div class="row text-center">
+          <div class="section-head col-sm-12">
+            <h4><span>Features</span></h4>
+            <p>
+              Rack Management is an online application designed to manage shelf
+              racks available at your workplace. It helps to organize items and
+              products and thus reduce the return time from the racks to serve
+              the needy in a better way. Admin and staff play prominent roles in
+              the applications. Admin can define categories, staff, products,
+              and racks. And staff are allowed to retrieve items from the shelf
+              racks. It has notification settings to receive notifications when
+              items or products cross a defined limit.
+            </p>
+          </div>
+        </div>
+        <div class="row">
+          <div
+            class="col-lg-4 col-md-12 mb-4 mb-lg-0 img-wrapper"
+            data-wow-duration="1s"
+            data-wow-delay=".8s"
+          >
+            <img
+              src="assets/img/new_store_listing.PNG"
+              class="w-100 shadow-1-strong rounded mb-4 zoom"
+              alt=""
+              (click)="onClick($event)"
+              class="modal-hover-opacity"
+              data-toggle="modal"
+              data-target="#myModal"
+            />
+            <div class="start-heading">Manage Stores</div>
+            <p class="line-height">
+              The admin user can manage the stores across various locations.
+              Staff users are assigned to the stores; similarly, shelf racks
+              belong to the stores.The store can contain a number of products,
+              items, and racks where all the products are added to the
+              corresponding racks. Notifications can also be created for the
+              store to notify them of the low quantity of products.
+            </p>
+          </div>
+          <div class="col-lg-4 mb-4 mb-lg-0 img-wrapper">
+            <img
+              src="assets/img/new_product_listing.PNG"
+              class="w-100 shadow-1-strong rounded mb-4 zoom"
+              alt=""
+              (click)="onClick($event)"
+              class="modal-hover-opacity"
+              data-toggle="modal"
+              data-target="#myModal"
+            />
+            <div class="start-heading">Define Categories</div>
+            <p class="line-height">
+              The administrator shall be allowed to define specifications for
+              their products and items. They will be able to drag and drop input
+              form fields to define the various categories of products and items
+              that they manage. These fields will be available while adding or
+              editing products and items in the store.
+            </p>
+          </div>
+          <div class="col-lg-4 mb-4 mb-lg-0 img-wrapper">
+            <img
+              src="assets/img/translate.PNG"
+              class="w-100 shadow-1-strong rounded mb-4 zoom"
+              alt=""
+              (click)="onClick($event)"
+              class="modal-hover-opacity"
+              data-toggle="modal"
+              data-target="#myModal"
+            />
+            <div class="start-heading">Translate Phrases</div>
+            <p class="line-height">
+              It allows you to rephrase the words that are used in the
+              application to match your business terminology. For instance, you
+              can rename the phrase `Product` as `Appliances`, similarly, `Rack`
+              as `Cub Board` and `Shelf` as `Tray` etc. Once a phrase is
+              translated, it is available to its admin and staff across their
+              various stores.
+            </p>
+          </div>
+          <div class="col-lg-4 mb-4 mb-lg-0 img-wrapper">
+            <img
+              src="assets/img/new_tray_pictures.PNG"
+              class="w-100 shadow-1-strong rounded mb-4 zoom"
+              alt=""
+              (click)="onClick($event)"
+              class="modal-hover-opacity"
+              data-toggle="modal"
+              data-target="#myModal"
+            />
+            <div class="start-heading">Rack View</div>
+            <p class="line-height">
+              A shelf rack view shows all the trays and cubboards that they
+              contain. You can also customize your tray by adding a picture to
+              it, changing the color, renaming the tray, copying it, or deleting
+              it. You can also arrange your trays as you like by dragging them
+              to expand or shrink. You can select a tray to know the products
+              and items that it contains.
+            </p>
+          </div>
+          <div class="col-lg-4 mb-4 mb-lg-0 img-wrapper">
+            <img
+              src="assets/img/new_tray_products.PNG"
+              class="w-100 shadow-1-strong rounded mb-4 zoom"
+              alt=""
+              (click)="onClick($event)"
+              class="modal-hover-opacity"
+              data-toggle="modal"
+              data-target="#myModal"
+            />
+            <div class="start-heading">Check out</div>
+            <p class="line-height">
+              From the rack view, users will be able to access the shelves and
+              tracks. When a shelf or track is opened, all the items and
+              products that are on it will be listed by their categories. From
+              this view, users can navigate to the check-in process to add items
+              and products to the shelf or tray.
+            </p>
+          </div>
+          <div class="col-lg-4 mb-4 mb-lg-0 img-wrapper">
+            <img
+              src="assets/img/new_notification.PNG"
+              class="w-100 shadow-1-strong rounded mb-4 zoom"
+              alt=""
+              (click)="onClick($event)"
+              class="modal-hover-opacity"
+              data-toggle="modal"
+              data-target="#myModal"
+            />
+            <div class="start-heading">Notifications</div>
+            <p class="line-height">
+              The user can define alerts to notify them when products or items
+              reach a lower quantity limit on a shelf or track. It can be
+              configured with the list of emails to be notified, the number of
+              reminders, and the time interval between the reminders.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="usecases" class="modal-body">
+    <use-case></use-case>
+  </div>
+
+  <!-- Why Choose Us-->
+
+  <div class="feat">
+    <div class="container">
+      <div class="row">
+        <div class="section-head col-sm-12">
+          <h4><span>Why Choose</span> Us?</h4>
+          <p>
+            When you choose us, you'll feel the benefit of 10 years' experience
+            of Web Development. Because we know the digital world and we know
+            that how to handle it. With working knowledge of online, SEO and
+            social media.
+          </p>
+        </div>
+        <div class="col-lg-4 col-sm-6">
+          <div class="items">
+            <span class="icon feature_box_col_one"
+              ><i class="fa fa-globe"></i
+            ></span>
+            <h6>Modern Design</h6>
+            <p>
+              We use latest technology for the latest world because we know the
+              demand of peoples. We choose latest technology becuase it is fast,
+              Secure and easy to by the user as well as us to develop
+              application.
+            </p>
+          </div>
+        </div>
+        <div class="col-lg-4 col-sm-6">
+          <div class="items">
+            <span class="icon feature_box_col_two"
+              ><i class="fa fa-shield"></i
+            ></span>
+            <h6>Security</h6>
+            <p>
+              Our Application use security based on authentication and
+              authorization where only users who are regsitered with our
+              application are allowed to login. We dont leak your data to no one
+              protecting your data's is top priority.
+            </p>
+          </div>
+        </div>
+        <div class="col-lg-4 col-sm-6">
+          <div class="items">
+            <span class="icon feature_box_col_three"
+              ><i class="fa fa-hourglass-half"></i
+            ></span>
+            <h6>User Support</h6>
+            <p>
+              If our customer has any problem and any query we are always happy
+              to help them and solve thier problems. You can contact us by
+              sending us email which will be available under your profile
+              section.
+            </p>
+          </div>
+        </div>
+        <div class="col-lg-4 col-sm-6">
+          <div class="items">
+            <span class="icon feature_box_col_four"
+              ><i class="fa fa-database"></i
+            ></span>
+            <h6>Features</h6>
+            <p>
+              In our Application Admin/Owner can manage thier stores, Racks,
+              products and staffs etc. Everything can be created by admin/owner
+              and can managed by admin. He can access all the operations in our
+              application.
+            </p>
+          </div>
+        </div>
+        <div class="col-lg-4 col-sm-6">
+          <div class="items">
+            <span class="icon feature_box_col_five"
+              ><i class="fa fa-upload"></i
+            ></span>
+            <h6>Market Strategy</h6>
+            <p>
+              We use latest technology for the latest world because we know the
+              demand of peoples
+            </p>
+          </div>
+        </div>
+        <div class="col-lg-4 col-sm-6">
+          <div class="items">
+            <span class="icon feature_box_col_six"
+              ><i class="fa fa-camera"></i
+            ></span>
+            <h6>Affordable cost</h6>
+            <p>
+              Love is a special word, and I use it only when I mean it. You say
+              the word too much and it becomes cheap. Currently we are giving
+              this application for free of cost to all the users
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- App features section-->
+  <div id="">
+    <div class="feat pt-5 pb-5">
+      <div class="container">
+        <div class="row">
+          <div
+            class="col-lg-4 col-md-12 mb-4 mb-lg-0 img-wrapper"
+            data-wow-duration="1s"
+            data-wow-delay=".8s"
+          >
+            <div class="text-center">
+              <i class="bi-shield icon-feature text-gradient d-block mb-3"></i>
+              <h3 class="font-alt">Security</h3>
+              <p class="text-muted mb-0">
+                We Dont leak your data's. Your data is top priority to us
+              </p>
+            </div>
+          </div>
+          <div class="col-lg-4 mb-4 mb-lg-0 img-wrapper">
+            <div class="text-center">
+              <i class="bi-phone icon-feature text-gradient d-block mb-3"></i>
+              <h3 class="font-alt">Device Support</h3>
+              <p class="text-muted mb-0">
+                Our Application supports on mobile view with minimal
+                functionality!
+              </p>
+            </div>
+          </div>
+          <div class="col-lg-4 mb-4 mb-lg-0 img-wrapper">
+            <div class="text-center">
+              <i class="bi-gift icon-feature text-gradient d-block mb-3"></i>
+              <h3 class="font-alt">Free to Use</h3>
+              <p class="text-muted mb-0">
+                Our Application is free to use there is no paid plan.
+              </p>
+            </div>
+          </div>
+          <div class="col-lg-4 mb-4 mb-lg-0 img-wrapper">
+            <div class="text-center">
+              <i class="bi-app icon-feature text-gradient d-block mb-3"></i>
+              <h3 class="font-alt">Easy to use</h3>
+              <p class="text-muted mb-0">
+                Our Application is easy to register and use doesnt not take too
+                long to register as we have minimal fields to fill
+              </p>
+            </div>
+          </div>
+          <div class="col-lg-4 mb-4 mb-lg-0 img-wrapper">
+            <div class="text-center">
+              <i
+                class="bi-envelope icon-feature text-gradient d-block mb-3"
+              ></i>
+              <h3 class="font-alt">Support</h3>
+              <p class="text-muted mb-0">
+                If you have any doubts you can mail through contact us tab below
+                our support team will replay within 24 Hours!
+              </p>
+            </div>
+          </div>
+          <div class="col-lg-4 mb-4 mb-lg-0 img-wrapper">
+            <div class="text-center">
+              <i class="bi-display icon-feature text-gradient d-block mb-3"></i>
+              <h3 class="font-alt">Flexible Access</h3>
+              <p class="text-muted mb-0">
+                Our Application can work from anywhere with internet access.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- <section id=""> -->
+  <!-- <div class="container px-5">
+      <div class="row gx-5 align-items-center">
+        <div class="col-lg-8 order-lg-1 mb-5 mb-lg-0">
+          <div class="container-fluid px-5">
+            <div class="row gx-5">
+              <div class="col-md-6 mb-5">
+                <div class="text-center">
+                  <i class="bi-phone icon-feature text-gradient d-block mb-3"></i>
+                  <h3 class="font-alt">Device Mockups</h3>
+                  <p class="text-muted mb-0">
+                    Ready to use HTML/CSS device mockups, no Photoshop required!
+                  </p>
+                </div>
+              </div>
+              <div class="col-md-6 mb-5">
+                <div class="text-center">
+                  <i class="bi-camera icon-feature text-gradient d-block mb-3"></i>
+                  <h3 class="font-alt">Flexible Use</h3>
+                  <p class="text-muted mb-0">
+                    Put an image, video, animation, or anything else in the
+                    screen!
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-6 mb-5 mb-md-0">
+                <div class="text-center">
+                  <i class="bi-gift icon-feature text-gradient d-block mb-3"></i>
+                  <h3 class="font-alt">Free to Use</h3>
+                  <p class="text-muted mb-0">
+                    As always, this theme is free to download and use for any
+                    purpose!
+                  </p>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="text-center">
+                  <i class="bi-patch-check icon-feature text-gradient d-block mb-3"></i>
+                  <h3 class="font-alt">Open Source</h3>
+                  <p class="text-muted mb-0">
+                    Since this theme is MIT licensed, you can use it
+                    commercially!
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-4 order-lg-0">
+          <div class="features-device-mockup">
+            <svg class="circle" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <linearGradient id="circleGradient" gradientTransform="rotate(45)">
+                  <stop class="gradient-start-color" offset="0%"></stop>
+                  <stop class="gradient-end-color" offset="100%"></stop>
+                </linearGradient>
+              </defs>
+              <circle cx="50" cy="50" r="50"></circle>
+            </svg><svg class="shape-1 d-none d-sm-block" viewBox="0 0 240.83 240.83" xmlns="http://www.w3.org/2000/svg">
+              <rect x="-32.54" y="78.39" width="305.92" height="84.05" rx="42.03"
+                transform="translate(120.42 -49.88) rotate(45)"></rect>
+              <rect x="-32.54" y="78.39" width="305.92" height="84.05" rx="42.03"
+                transform="translate(-49.88 120.42) rotate(-45)"></rect>
+            </svg><svg class="shape-2 d-none d-sm-block" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="50" cy="50" r="50"></circle>
+            </svg>
+            <div class="device-wrapper">
+              <div class="device" data-device="iPhoneX" data-orientation="portrait" data-color="black">
+                <div class="screen bg-black">
+                  <video class="video" muted="muted" autoplay="" loop="">
+                    <source src="assets/img/demo-screen.mp4" type="video/mp4" />
+                  </video>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div> -->
+  <!-- </section> -->
+  <!-- Basic features section-->
+  <!-- <section class="bg-light">
+    <div class="container px-5">
+      <div class="row gx-5 align-items-center justify-content-center justify-content-lg-between">
+        <div class="col-12 col-lg-5">
+          <h2 class="display-4 lh-1 mb-4">Enter a new age of web design</h2>
+          <p class="lead fw-normal text-muted mb-5 mb-lg-0">
+            This section is perfect for featuring some information about your
+            application, why it was built, the problem it solves, or anything
+            else! There's plenty of space for text here, so don't worry about
+            writing too much.
+          </p>
+        </div>
+        <div class="col-sm-8 col-md-6">
+          <div class="px-5 px-sm-0">
+            <img class="img-fluid rounded-circle" src="https://source.unsplash.com/u8Jn2rzYIps/900x900" alt="..." />
+          </div>
+        </div>
+      </div>
+    </div>
+  </section> -->
+  <!-- Plan Section-->
+  <!-- <section class="card">
+    <div class="cards">
+      <canvas baseChart [datasets]="barChartData" [labels]="barChartLabels" [options]="barChartOptions"
+        [plugins]="barChartPlugins" [legend]="barChartLegend" [chartType]="barChartType"></canvas>
+    </div>
+  </section> -->
+  <!-- App badge section-->
+  <!-- <section class="bg-gradient-primary-to-secondary" id="download">
+    <div class="container px-5">
+      <h2 class="text-center text-white font-alt mb-4">Get the app now!</h2>
+      <div class="d-flex flex-column flex-lg-row align-items-center justify-content-center">
+        <a class="me-lg-3 mb-4 mb-lg-0" href="#!">
+          <img class="app-badge" src="assets/img/google-play-badge.svg" alt="..." />
+        </a>
+        <a href="#!">
+          <img class="app-badge" src="assets/img/app-store-badge.svg" alt="..." />
+        </a>
+      </div>
+    </div>
+  </section> -->
+  <!-- Footer-->
+  <footer class="bg-black text-center py-5">
+    <div class="container px-5">
+      <div class="text-white-50 footer-font-size">
+        <!-- <div class="mb-2">&copy; Your Website 2021. All Rights Reserved.</div> -->
+        <label data-toggle="modal" data-target="#termsAndConditions"
+          >Terms</label
+        >
+        <span class="mx-1">&middot;</span>
+        <label>Mail to - correspondence@rms.electems.com</label>
+        <span class="mx-1">&middot;</span>
+        <a class="Profile" *ngIf="isOtherUser" href="http://electems.com/support" target="_blank">
+          <label data-bs-toggle="modal">Contact Us</label>
+        </a>
+        <span class="mx-1">&middot;</span>
+        <label data-toggle="modal" data-target="#faqs">FAQs</label>
+      </div>
+    </div>
+  </footer>
+  <!-- Feedback modal-->
+  <!-- <div class="modal fade" id="feedbackModal" tabindex="-1" aria-labelledby="feedbackModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header bg-gradient-primary-to-secondary p-4">
+          <h5 class="modal-title font-alt text-white" id="feedbackModalLabel">
+            Send feedback
+          </h5>
+          <button class="btn-close btn-close-white" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body border-0 p-4">
+          <form>
+            <div class="form-floating mb-4">
+              <input class="form-control" id="inputName" type="text" placeholder="Enter your name..." />
+              <label for="inputName">Name</label>
+            </div>
+            <div class="form-floating mb-4">
+              <input class="form-control" id="inputEmail" type="email" placeholder="name@example.com" />
+              <label for="inputEmail">Email address</label>
+            </div>
+            <div class="form-floating mb-4">
+              <input class="form-control" id="inputPhone" type="tel" placeholder="(123) 456-7890" />
+              <label for="inputPhone">Phone number</label>
+            </div>
+            <div class="form-floating mb-4">
+              <textarea class="form-control" id="inputMessage" placeholder="Enter your message here..."></textarea>
+              <label for="inputMessage">Message</label>
+            </div>
+            <div class="d-grid">
+              <button class="btn btn-primary rounded-pill py-3" type="submit">
+                Submit
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div> -->
+  <div
+    class="modal fade bd-example-modal-lg"
+    id="termsAndConditions"
+    role="dialog"
+  >
+    <div class="modal-dialog modal-lg" role="document">
+      <div class="modal-content">
+        <div class="modal-header bg-gradient-primary-to-secondary p-2">
+          <h5 class="modal-title font-alt text-white" id="feedbackModalLabel">
+            Terms and Conditions
+          </h5>
+          <button
+            type="button"
+            class="close"
+            data-dismiss="modal"
+            aria-label="Close"
+          >
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <app-terms-condition></app-terms-condition>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="modal fade bd-example-modal-lg" id="faqs" role="dialog">
+    <div class="modal-dialog modal-lg" role="document">
+      <div class="modal-content">
+        <div class="modal-header bg-gradient-primary-to-secondary p-2">
+          <h5 class="modal-title font-alt text-white" id="feedbackModalLabel">
+            FAQs
+          </h5>
+          <button
+            type="button"
+            class="close"
+            data-dismiss="modal"
+            aria-label="Close"
+          >
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <faq-component></faq-component>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div
+    class="modal"
+    id="loginModal"
+    tabindex="-1"
+    aria-labelledby="feedbackModalLabel"
+    aria-hidden="true"
+  >
+    <div class="modal-sm modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header bg-gradient-primary-to-secondary p-2">
+          <h5 class="modal-title font-alt text-white" id="feedbackModalLabel">
+            User Login
+          </h5>
+          <button
+            class="btn-close btn-close-white"
+            type="button"
+            data-bs-dismiss="modal"
+            aria-label="Close"
+            (click)="reloadPage()"
+          ></button>
+        </div>
+        <div class="modal-body border-0 p-4"><app-login></app-login></div>
+      </div>
+    </div>
+  </div>
+  <div
+    class="modal"
+    id="registerModal"
+    tabindex="-1"
+    aria-labelledby="feedbackModalLabel"
+    aria-hidden="true"
+  >
+    <div class="modal-lg modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header bg-gradient-primary-to-secondary p-2">
+          <h5 class="modal-title font-alt text-white" id="feedbackModalLabel">
+            Register Form
+          </h5>
+          <button
+            class="btn-close btn-close-white"
+            type="button"
+            data-bs-dismiss="modal"
+            aria-label="Close"
+            (click)="reloadPage()"
+          ></button>
+        </div>
+        <div class="modal-body border-0 p-4"><app-register></app-register></div>
+      </div>
+    </div>
+  </div>
+  <div
+    class="modal"
+    id="forgotpasswordModal"
+    tabindex="-1"
+    aria-labelledby="feedbackModalLabel"
+    aria-hidden="true"
+  >
+    <div class="modal-sm modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header bg-gradient-primary-to-secondary p-2">
+          <h5 class="modal-title font-alt text-white" id="feedbackModalLabel">
+            Forgot Password
+          </h5>
+          <button
+            class="btn-close btn-close-white"
+            type="button"
+            data-bs-dismiss="modal"
+            aria-label="Close"
+            (click)="reloadPage()"
+          ></button>
+        </div>
+        <div class="modal-body border-0 p-4">
+          <app-forgot-password></app-forgot-password>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div
+    class="modal"
+    id="contactusModal"
+    tabindex="-1"
+    aria-labelledby="feedbackModalLabel"
+    aria-hidden="true"
+  >
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header bg-gradient-primary-to-secondary p-2">
+          <h5 class="modal-title font-alt text-white" id="feedbackModalLabel">
+            Post Enquires
+          </h5>
+          <button
+            (click)="clearInputsInBootstrap()"
+            class="btn-close btn-close-white"
+            type="button"
+            data-bs-dismiss="modal"
+            aria-label="Close"
+          ></button>
+        </div>
+        <div class="modal-body border-0 p-4">
+          <app-contact-us></app-contact-us>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Image Modal -->
+  <div class="modal fade" id="myModal" role="dialog" style="text-align: center">
+    <div class="modal-dialog modal-fullscreen">
+      <div style="padding-top: 5%">
+        <!-- <div class="modal-header">
+        <button type="button" #closebutton class="close" data-dismiss="modal">&times;</button>
+      </div> -->
+        <div>
+          <img
+            src="{{ imgSrc }}"
+            style="width: 90%; cursor: pointer"
+            class="modal-hover-opacity"
+          />
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Image Modal -->
+</div>

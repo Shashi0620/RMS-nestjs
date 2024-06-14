@@ -1,0 +1,92 @@
+<div class="page-title ml-3 mt-3">
+  <div *ngIf="action == 'Add'">
+    <h4>Create Translate</h4>
+  </div>
+  <div *ngIf="action == 'Update'">
+    <h4>Update Translate</h4>
+  </div>
+</div>
+<div class="main-content">
+  <!---<h3 mat-dialog-title>Row Action :: <strong>{{action}}</strong></h3>-->
+  <div mat-dialog-content style="padding: 0 18px !important">
+    <mat-form-field *ngIf="action != 'Delete'; else elseTemplates">
+      <div *ngIf="action == 'Update'">
+        <h6>Key</h6>
+        <lable>{{local_data.Key}}</lable>
+      </div>
+      <div *ngIf="action == 'Add'">
+        <h6>Key</h6>
+        <input
+          class="keyvalue"
+          id="key_id"
+          placeholder="{{action}} Key"
+          matInput
+          [(ngModel)]="local_data.Key"
+        />
+      </div>
+      <br />
+      <div>
+        <h6>Value</h6>
+        <input
+          class="keyvalue"
+          id="value_id"
+          placeholder="{{action}} Value"
+          matInput
+          [(ngModel)]="local_data.Value"
+        />
+      </div>
+    </mat-form-field>
+    <div
+      mat-dialog-actions
+      *ngIf="action != 'Delete'; else elseTemplates"
+      style="padding: 0px"
+    >
+      <div>
+        <button
+          class="btn btn-sm btn-danger mt-2 pull-right"
+          mat-button
+          (click)="closeDialog()"
+          mat-flat-button
+          color="warn"
+          title="Click to cancel"
+        >
+          Cancel
+        </button>
+        <button
+          id="add_translate"
+          class="btn btn-sm btn-primary mt-2 pull-right"
+          mat-button
+          (click)="doAction()"
+          mat-flat-button
+          title="Click to save translatable word"
+        >
+          {{action}}
+        </button>
+      </div>
+    </div>
+    <ng-template #elseTemplates style="padding: 0px">
+      <button
+        class="btn btn-sm btn-primary mt-2 pull-right bi bi-shop"
+        mat-button
+        (click)="doAction()"
+        mat-flat-button
+        title="Click to save translatable word"
+      >
+        {{action}}
+      </button>
+      <button
+        class="btn btn-sm btn-danger mt-2 pull-right"
+        mat-button
+        (click)="closeDialog()"
+        mat-flat-button
+        color="warn"
+        title="Click to cancel"
+      >
+        <span class="btn-label">
+          <i class="btn-close mr-1"></i>
+        </span>
+        Cancel
+      </button>
+    </ng-template>
+  </div>
+</div>

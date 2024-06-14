@@ -1,0 +1,18 @@
+import './registeration.cy'
+import './login.cy'
+import './loginModal.cy'
+import './userProfileSection.cy'
+import './templateListEdit.cy'
+import './products.cy'
+import './storeSection.cy'
+import './addStaff.cy'
+import './racksearchable.cy'
+import './racksection.cy'
+import './checkin-checkout-product.cy'
+import './notification.cy'
+import './searchItem.cy'
+import './timeInterval.cy'
+import './translatesection.cy'
+import './forgotPassword.cy'
+
+

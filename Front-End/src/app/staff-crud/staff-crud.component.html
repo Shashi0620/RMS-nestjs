@@ -1,0 +1,118 @@
+<div class="page-title row">
+  <div class="col">
+    <h2 class="arrange-icon">
+      {{ value }} Listing
+      <app-help [infoKey]="staffSupport"></app-help>
+    </h2>
+  </div>
+  <div class="col">
+    <div
+      *ngIf="this.noOfstaff.length < this.noOfUsers || RoleName == 'SuperAdmin'"
+    >
+      <div>
+        <button
+          id="Add_Staff"
+          class="btn btn-sm btn-primary mt-2 pull-right"
+          data-toggle="tooltip"
+          data-placement="bottom"
+          title="Click here to create new {{ staffTranslate }}"
+          routerLink="/add-staff/"
+        >
+          Add {{ value }}
+        </button>
+      </div>
+    </div>
+    <div *ngIf="this.noOfstaff.length === this.noOfUsers">
+      <div>
+        <button
+          id="Add_Staff"
+          class="btn btn-sm btn-primary mt-2 pull-right"
+          data-toggle="tooltip"
+          data-placement="bottom"
+          title="Add {{ staffTranslate }}"
+          (click)="staffLimitPopUp()"
+        >
+          Add {{ value }}
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="mat-app-background basic-container">
+  <div *ngIf="dataSource.data.length > 0">
+    <mat-table
+      [dataSource]="dataSource"
+      class="mat-elevation-z8"
+      id="stafflisting"
+    >
+      <!--- Note that these columns can be defined in any order.
+              The actual rendered columns are set as a property on the row definition" -->
+
+      <!-- Position Column -->
+      <ng-container
+        matColumnDef="noData"
+        [attr.colspan]="dataSource.length"
+        class="table-view"
+      >
+        No records
+      </ng-container>
+      <ng-container matColumnDef="name">
+        <mat-header-cell
+          class="custom-mat-header-styling tableHeaderCellDiv"
+          *matHeaderCellDef
+          class="table-view"
+        >
+          Name
+        </mat-header-cell>
+        <mat-cell *matCellDef="let element" class="table-view">
+          {{ element.username }}
+        </mat-cell>
+      </ng-container>
+
+      <!-- Name Column -->
+      <ng-container matColumnDef="email">
+        <mat-header-cell
+          class="custom-mat-header-styling tableHeaderCellDiv"
+          *matHeaderCellDef
+          class="table-view"
+        >
+          Email
+        </mat-header-cell>
+        <mat-cell *matCellDef="let element" class="table-view">
+          {{ element.email }}
+        </mat-cell>
+      </ng-container>
+
+      <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+      <mat-row *matRowDef="let row; columns: displayedColumns"></mat-row>
+
+      <ng-container matColumnDef="actions">
+        <mat-header-cell *matHeaderCellDef class="table-view">
+          Actions
+        </mat-header-cell>
+        <mat-cell *matCellDef="let element">
+          <span
+            class="bi-pencil-fill mr-4 edit-icon"
+            routerLink="/edit-staff/{{ element.id }}"
+            id="editStaff"
+            data-toggle="tooltip"
+            data-placement="bottom"
+            title="CLick here to edit {{ staffTranslate }}"
+          ></span>
+          <span
+            id="delete_staff"
+            class="bi-trash-fill mr-2 delete-icon"
+            data-toggle="tooltip"
+            data-placement="bottom"
+            title="CLick here to delete {{ staffTranslate }}"
+            (click)="deleteStaff(element.id)"
+          ></span>
+        </mat-cell>
+      </ng-container>
+    </mat-table>
+    <!-- <mat-paginator #paginator [pageSize]="dataSource.data.length"></mat-paginator> -->
+  </div>
+  <div class="with-align" *ngIf="dataSource.data.length === 0">
+    No Records Found
+  </div>
+</div>

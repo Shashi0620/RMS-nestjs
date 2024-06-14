@@ -1,0 +1,149 @@
+<div class="main-content">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="card border-0">
+          <div class="card-block">
+            <div>
+              <div class="row">
+                <div class="col-md-8 ml-auto mr-auto">
+                  <div>
+                    <h4 *ngIf="addForm">Create {{ value }}</h4>
+                    <h4 *ngIf="!addForm">Edit {{ value }}</h4>
+                  </div>
+                  <form name="myForm" [formGroup]="staffForm" (ngSubmit)="saveClientStaff()" id="staffForm">
+                    <div class="row">
+                      <div class="col-md-6">
+                        <div class="form-group">
+                          <label for="title" placeholder="Placeholder">Username</label>
+                          <input type="text" class="form-control" id="username" placeholder="Enter your UserName"
+                            formControlName="username" [ngClass]="{
+                              'is-invalid': submitted && f.username.errors
+                            }" name="username" [(ngModel)]="staffObj.username" />
+                          <div *ngIf="submitted && f.username.errors" class="invalid-feedback">
+                            <div *ngIf="f.username.errors.required">
+                              Username is required
+                            </div>
+                          </div>
+                          <div class="color-red" *ngIf="isExist">
+                            Username already exist
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="form-group">
+                          <label for="description">Email</label>
+                          <input type="text" class="form-control" id="email" placeholder="Enter your Email"
+                            formControlName="email" [ngClass]="{
+                              'is-invalid': submitted && f.email.errors
+                            }" name="email" [(ngModel)]="staffObj.email" />
+                          <div *ngIf="submitted && f.email.errors" class="invalid-feedback">
+                            <div *ngIf="f.email.errors.required">
+                              Email is required
+                            </div>
+                          </div>
+                          <div class="color-red" *ngIf="isExist">
+                            Email already exist
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-md-12">
+                        <div class="form-group">
+                          <label for="title">Password</label>
+                          <input type="text" class="form-control" type="password" id="password"
+                            placeholder="Enter your Password" formControlName="password" [ngClass]="{
+                              'is-invalid': submitted && f.password.errors
+                            }" name="password" [(ngModel)]="staffObj.password" />
+                          <div *ngIf="submitted && f.password.errors" class="invalid-feedback">
+                            <div *ngIf="f.password.errors.required">
+                              Password is required
+                            </div>
+                          </div>
+                          <div *ngIf="f.password.errors?.['minlength']" class="invalid-feedback">
+                            Password must be at least 6 characters long.
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-md-12">
+                        <div class="form-group">
+                          <label for="title">Confirm Password</label>
+                          <input type="text" class="form-control" type="password" id="confirmPassword"
+                            placeholder="Enter Password  To Confirm" formControlName="confirmPassword" [ngClass]="{
+                              'is-invalid':
+                                submitted && f.confirmPassword.errors
+                            }" name="confirmPassword" [(ngModel)]="staffObj.confirmPassword" />
+                          <div *ngIf="submitted && f.confirmPassword.errors" class="invalid-feedback">
+                            <div *ngIf="f.confirmPassword.errors.required">
+                              Confirm Password is required
+                            </div>
+                            <div *ngIf="
+                                f.confirmPassword.errors.confirmedValidator
+                              " class="text-danger">
+                              Password and Confirm Password are not matching.
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div
+                    *ngIf="showPasswordNotMatching"
+                    class="text-danger"
+                  >
+                    Password and Confirm Password must be match.
+                  </div>
+
+                    <div *ngIf="isStorePresent" id="dropdowndata">
+                      <label for="storeFk">Select {{ stores }}:</label>
+                      <ng-multiselect-dropdown id="selectStore" [placeholder]="'Select store'"
+                        extra-settings="{selectionLimit:storeList}" [settings]="dropdownSettings"
+                        [ngModelOptions]="{standalone: true}" [data]="storeList" [formControl]="f.selectedStore"
+                        [(ngModel)]="staffObj.selectedStores" (onSelect)="onItemSelect($event)"
+                        (onSelectAll)="onSelectAll($event)">
+                      </ng-multiselect-dropdown>
+                      <span *ngIf="f?.selectedStore?.errors?.required" class="text-danger">
+                        <span *ngIf="
+                            submitted && f?.selectedStore?.errors?.required
+                          " class="text-danger">
+                          Store is required
+                        </span>
+                      </span>
+                    </div>
+
+                    <div class="row">
+                      <div class="col-md-6 col-xs-6">
+                        <div class="checkbox">
+                          <input id="check1" type="hidden" />
+                          <label for="check1">
+                            <a class="text-link" href=""></a>.</label>
+                        </div>
+                      </div>
+                      <div class="col-md-6 col-xs-6">
+                        <div class="text-right mrg-top-5">
+                          <div class="form-group">
+                            <button *ngIf="addForm" class="btn btn-primary ml-2" id="CreateStaff" title="Click to save staff">
+                              Create {{ value }}
+                            </button>
+                            <button *ngIf="!addForm" class="btn btn-primary ml-2" id="CreateStaff" title="Click to update staff">
+                              Update {{ value }}
+                            </button>
+                            <button routerLink="/staff" class="btn btn-danger" id="CancelStaff" title="Click to cancel">
+                              Cancel
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
